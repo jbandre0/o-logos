@@ -1,0 +1,3166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>ὁ Λόγος · Koine Greek</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Cinzel+Decorative:wght@700&family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet"/>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --sky:#080C18;
+  --pap:#F0E0B0;--pap2:#E8D49E;--pap3:#DEC88A;
+  --pap-ink:#1C1008;--pap-muted:#7A6040;--pap-muted2:#AA9070;
+  --gold:#C9A025;--goldL:#A07818;--goldD:#7A5C10;--goldP:rgba(201,160,37,0.18);
+  --border:rgba(0,0,0,0.09);--border-hi:rgba(201,160,37,0.55);
+  --card:#FFFDF5;--card2:#F5EDD8;
+  --l1:#B03030;--l2:#B85C28;--l3:#9A7A1A;--l4:#2A5EA8;--l5:#6B3F9A;--lm:#2A7A4A;
+  --crimson:#7B1A2A;--ink-blue:#1A3A6B;
+}
+body{background:var(--sky);color:var(--pap-ink);font-family:'Cormorant Garamond',Georgia,serif;min-height:100vh;overflow-x:hidden;}
+input,select,textarea,button{font-family:inherit;}
+input::placeholder,textarea::placeholder{color:var(--pap-muted2);}
+::-webkit-scrollbar{width:3px;}::-webkit-scrollbar-thumb{background:rgba(0,0,0,.2);border-radius:2px;}
+
+/* ═══ COSMOS BACKGROUND ═══ */
+.cosmos{position:fixed;inset:0;pointer-events:none;z-index:0;
+  background:radial-gradient(ellipse 70% 50% at 50% 0%,rgba(201,160,37,0.10) 0%,transparent 60%),
+    radial-gradient(ellipse 40% 30% at 15% 70%,rgba(26,58,107,0.25) 0%,transparent 70%),
+    radial-gradient(ellipse 35% 35% at 85% 30%,rgba(123,26,42,0.12) 0%,transparent 60%);
+}
+.cosmos::before{content:'';position:fixed;inset:0;
+  background-image:
+    radial-gradient(circle 1px at 12% 18%,rgba(255,255,255,.55) 0%,transparent 100%),
+    radial-gradient(circle 1px at 78% 12%,rgba(255,255,255,.45) 0%,transparent 100%),
+    radial-gradient(circle 1.5px at 38% 7%,rgba(255,255,255,.65) 0%,transparent 100%),
+    radial-gradient(circle 1px at 91% 32%,rgba(255,255,255,.4) 0%,transparent 100%),
+    radial-gradient(circle 1px at 6% 58%,rgba(255,255,255,.45) 0%,transparent 100%),
+    radial-gradient(circle 1px at 62% 4%,rgba(255,255,255,.55) 0%,transparent 100%),
+    radial-gradient(circle 1.5px at 83% 68%,rgba(255,255,255,.35) 0%,transparent 100%),
+    radial-gradient(circle 1px at 22% 88%,rgba(255,255,255,.3) 0%,transparent 100%),
+    radial-gradient(circle 1px at 50% 72%,rgba(255,255,255,.4) 0%,transparent 100%),
+    radial-gradient(circle 1px at 30% 42%,rgba(255,255,255,.35) 0%,transparent 100%),
+    radial-gradient(circle 1px at 55% 88%,rgba(255,255,255,.3) 0%,transparent 100%),
+    radial-gradient(circle 1px at 70% 55%,rgba(255,255,255,.25) 0%,transparent 100%);
+}
+
+/* ═══ PAPYRUS PANEL ═══ */
+.papyrus{
+  position:relative;z-index:1;
+  max-width:740px;margin:0 auto;
+  min-height:100vh;
+  background:linear-gradient(180deg,var(--pap) 0%,var(--pap2) 30%,var(--pap) 65%,var(--pap3) 100%);
+  background-image:
+    repeating-linear-gradient(0deg,transparent,transparent 36px,rgba(0,0,0,0.016) 36px,rgba(0,0,0,0.016) 37px),
+    linear-gradient(180deg,var(--pap) 0%,var(--pap2) 30%,var(--pap) 65%,var(--pap3) 100%);
+  box-shadow:-24px 0 80px rgba(0,0,0,.55),24px 0 80px rgba(0,0,0,.55),0 0 140px rgba(201,160,37,0.06);
+  border-left:4px solid var(--goldD);border-right:4px solid var(--goldD);
+  padding-bottom:80px;
+}
+
+/* Gold bands top + bottom */
+.pap-band{
+  height:26px;background:var(--goldD);display:flex;align-items:center;justify-content:center;
+  font-size:11px;letter-spacing:.55em;color:rgba(255,255,255,0.5);
+  font-family:'Cinzel',serif;padding-right:.55em;overflow:hidden;white-space:nowrap;
+}
+.pap-band--bot{border-top:2px solid var(--gold);}
+.pap-band--top{border-bottom:2px solid var(--gold);}
+
+/* ═══ HEADER / BRANDING ═══ */
+.pap-header{
+  padding:32px 40px 24px;
+  display:flex;align-items:flex-end;justify-content:center;gap:28px;
+  border-bottom:1px solid rgba(0,0,0,0.08);
+}
+.pap-header-center{text-align:center;flex:1;}
+.brand-gk{
+  font-family:'Cinzel Decorative','Cinzel',serif;
+  font-size:42px;font-weight:700;
+  color:var(--goldD);
+  line-height:1;
+  letter-spacing:.04em;
+  text-shadow:0 2px 12px rgba(201,160,37,0.25);
+}
+.brand-sub{
+  font-family:'Cinzel',serif;font-size:9px;
+  color:var(--pap-muted);letter-spacing:.3em;text-transform:uppercase;
+  margin-top:8px;
+}
+/* Column SVG */
+.col-svg{color:var(--goldD);opacity:0.7;flex-shrink:0;}
+.col-svg path,.col-svg rect,.col-svg polygon,.col-svg line{fill:currentColor;stroke:none;}
+.col-svg line{stroke:rgba(0,0,0,0.15);fill:none;}
+
+/* ═══ NAVIGATION ═══ */
+.pap-nav{
+  display:flex;gap:0;border-bottom:2px solid rgba(0,0,0,0.1);
+  padding:0 32px;
+  background:rgba(0,0,0,0.025);
+}
+.nav-btn{
+  flex:1;padding:12px 4px;border:none;background:transparent;
+  cursor:pointer;font-family:'Cinzel',serif;font-size:10.5px;
+  letter-spacing:.12em;text-transform:uppercase;
+  color:var(--pap-muted);transition:all .2s;
+  border-bottom:2px solid transparent;margin-bottom:-2px;
+  white-space:nowrap;
+}
+.nav-btn:hover{color:var(--goldL);}
+.nav-btn.active{color:var(--goldD);border-bottom-color:var(--goldD);font-weight:600;}
+
+/* ═══ CONTENT AREA ═══ */
+.pap-content{padding:28px 36px;}
+.tab-panel{display:none;}
+.tab-panel.active{display:block;}
+
+/* Section heading */
+.s-head{
+  font-family:'Cinzel',serif;font-size:9px;letter-spacing:.22em;
+  text-transform:uppercase;color:var(--goldL);
+  display:flex;align-items:center;gap:14px;margin-bottom:20px;
+}
+.s-head-line{flex:1;height:1px;background:linear-gradient(90deg,rgba(160,120,24,0.3),transparent);}
+
+/* Cards */
+.card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:22px;}
+.card2{background:var(--card2);border:1px solid var(--border);border-radius:11px;padding:16px 18px;}
+
+/* Buttons */
+.btn1{
+  background:linear-gradient(135deg,var(--goldD),var(--crimson));color:#fff;
+  border:none;border-radius:10px;padding:12px 24px;font-size:13px;cursor:pointer;
+  font-weight:600;letter-spacing:.06em;display:inline-flex;align-items:center;gap:8px;
+  box-shadow:0 4px 18px rgba(122,92,16,0.25);transition:all .2s;font-family:'Cinzel',serif;
+}
+.btn1:hover{opacity:.9;transform:translateY(-1px);}
+.btn1:disabled{opacity:.35;cursor:not-allowed;transform:none;box-shadow:none;}
+.btn2{
+  background:transparent;color:var(--goldL);border:1px solid rgba(160,120,24,0.4);
+  border-radius:9px;padding:10px 20px;font-size:12px;cursor:pointer;
+  letter-spacing:.06em;transition:all .2s;font-family:'Cinzel',serif;
+}
+.btn2:hover{border-color:var(--gold);background:var(--goldP);}
+.btn3{
+  background:rgba(0,0,0,0.03);color:var(--pap-ink);border:1px solid var(--border);
+  border-radius:8px;padding:8px 15px;font-size:12px;cursor:pointer;transition:all .2s;
+}
+.btn3:hover{background:rgba(0,0,0,0.07);}
+
+/* Inputs */
+.inp{
+  width:100%;background:rgba(0,0,0,0.025);border:1px solid var(--border);
+  border-radius:8px;padding:10px 13px;color:var(--pap-ink);font-size:14px;
+  outline:none;transition:border-color .2s;
+}
+.inp:focus{border-color:var(--border-hi);}
+.lbl{display:block;font-size:10px;color:var(--pap-muted);letter-spacing:.14em;text-transform:uppercase;margin-bottom:6px;font-family:'Cinzel',serif;}
+.field{margin-bottom:16px;}
+
+/* Badge */
+.badge{font-size:9px;padding:3px 8px;border-radius:20px;white-space:nowrap;display:inline-block;letter-spacing:.05em;font-family:'Cinzel',serif;}
+.badge-gold{background:rgba(201,160,37,0.15);color:var(--goldD);border:1px solid rgba(201,160,37,0.3);}
+.badge-noun{background:rgba(42,94,168,0.1);color:#1A3A6B;border:1px solid rgba(42,94,168,0.2);}
+.badge-verb{background:rgba(139,26,42,0.1);color:var(--crimson);border:1px solid rgba(139,26,42,0.2);}
+.badge-adj{background:rgba(42,122,74,0.1);color:#1A5A38;border:1px solid rgba(42,122,74,0.2);}
+.badge-other{background:rgba(0,0,0,0.05);color:var(--pap-muted);border:1px solid var(--border);}
+
+/* Box grid */
+.box-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;margin-bottom:16px;}
+.box-card{
+  border-radius:12px;padding:14px 10px;cursor:pointer;
+  transition:all .15s;text-align:center;border:1.5px solid var(--border);
+  background:var(--card);
+}
+.box-card:hover{transform:translateY(-2px);box-shadow:0 4px 14px rgba(0,0,0,.08);}
+.box-label{font-family:'Cinzel',serif;font-size:8px;letter-spacing:.12em;text-transform:uppercase;margin-bottom:4px;font-weight:600;}
+.box-count{font-size:30px;font-weight:700;line-height:1;font-family:'Cinzel',serif;}
+.box-sub{font-size:9px;color:var(--pap-muted);margin-top:3px;letter-spacing:.04em;}
+
+/* Word rows (for lexicon) */
+.word-row{
+  background:var(--card);border:1px solid var(--border);border-radius:10px;
+  padding:12px 15px;display:flex;align-items:center;gap:12px;margin-bottom:6px;
+  transition:border-color .2s;
+}
+.word-row:hover{border-color:rgba(160,120,24,0.25);}
+.word-gk{font-size:20px;color:var(--goldD);min-width:140px;font-weight:600;}
+.word-art{font-size:12px;color:var(--pap-muted);font-style:italic;}
+.word-gl{flex:1;font-size:13px;color:var(--pap-ink);}
+.word-occ{font-size:10px;color:var(--pap-muted2);min-width:36px;text-align:right;font-family:'Cinzel',serif;}
+
+/* Prog bar */
+.prog-bar{height:3px;background:rgba(0,0,0,0.07);border-radius:3px;overflow:hidden;margin-top:6px;}
+.prog-fill{height:100%;border-radius:3px;background:linear-gradient(90deg,var(--gold),var(--crimson));transition:width .5s ease;}
+
+/* Flip card */
+.flip-wrap{perspective:1400px;height:300px;margin-bottom:18px;cursor:pointer;}
+.flip-inner{transform-style:preserve-3d;transition:transform .6s cubic-bezier(.4,0,.2,1);height:100%;position:relative;}
+.flip-inner.flipped{transform:rotateY(180deg);cursor:default;}
+.flip-face{
+  position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;
+  background:var(--card);border:1px solid var(--border);border-radius:18px;
+  padding:24px;display:flex;flex-direction:column;align-items:center;justify-content:center;
+}
+.flip-back{
+  transform:rotateY(180deg);
+  background:linear-gradient(145deg,var(--card),var(--card2));
+  border-color:rgba(160,120,24,0.3);overflow-y:auto;justify-content:flex-start;padding-top:20px;
+}
+.flip-face::before{
+  content:'';position:absolute;top:0;left:50%;transform:translateX(-50%);
+  width:55%;height:3px;border-radius:0 0 40px 40px;
+  background:linear-gradient(90deg,transparent,rgba(201,160,37,0.5),transparent);
+}
+
+/* Rating grid — 2 buttons */
+.rating-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.rate-btn{
+  border-radius:11px;padding:14px 8px;cursor:pointer;text-align:center;
+  border:1px solid;transition:all .15s;font-weight:700;font-family:'Cinzel',serif;
+  font-size:12px;letter-spacing:.06em;
+}
+.rate-btn:hover{transform:translateY(-2px);}
+
+/* Today banner */
+.today-banner{
+  display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;
+  background:rgba(160,120,24,0.07);border:1px solid rgba(160,120,24,0.18);
+  border-radius:10px;padding:10px 16px;margin-bottom:16px;
+}
+.today-day{font-family:'Cinzel',serif;font-size:12px;font-weight:700;color:var(--goldD);letter-spacing:.1em;}
+.today-plan{font-size:11px;color:var(--pap-muted);font-style:italic;}
+
+/* Session done message */
+.session-done-msg{text-align:center;padding:32px 20px;}
+.session-done-check{font-size:36px;color:var(--lm);margin-bottom:10px;}
+.session-done-title{font-family:'Cinzel',serif;font-size:14px;letter-spacing:.1em;color:var(--pap-ink);margin-bottom:6px;text-transform:uppercase;}
+.session-done-sub{font-size:12px;color:var(--pap-muted);font-style:italic;line-height:1.6;}
+
+/* Session toggle pills in modal */
+.sess-toggles{display:flex;flex-wrap:wrap;gap:6px;}
+.sess-toggle{
+  display:inline-flex;align-items:center;gap:4px;cursor:pointer;
+  border-radius:20px;border:1px solid var(--border);padding:6px 14px;
+  font-size:11px;font-family:'Cinzel',serif;letter-spacing:.06em;
+  color:var(--pap-muted);background:transparent;transition:all .15s;
+  user-select:none;
+}
+.sess-toggle.active{background:rgba(160,120,24,0.1);border-color:rgba(160,120,24,0.5);color:var(--goldD);}
+
+/* Back-of-card Greek word */
+.session-back-gk{font-size:42px;font-weight:700;color:var(--goldD);text-align:center;line-height:1.1;margin-bottom:4px;}
+.session-word-en-front{font-size:26px;font-weight:600;color:var(--pap-ink);text-align:center;line-height:1.3;padding:0 10px;}
+
+/* Parse tab */
+.parse-card-gk{font-size:52px;color:var(--goldD);font-weight:700;text-align:center;margin-bottom:8px;}
+.parse-field-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:14px;}
+.parse-field-btn{
+  border-radius:9px;padding:10px 8px;cursor:pointer;text-align:center;
+  border:1px solid var(--border);background:transparent;
+  font-size:12px;color:var(--pap-muted);transition:all .2s;
+  font-family:'Cinzel',serif;letter-spacing:.05em;
+}
+.parse-field-btn:hover{color:var(--pap-ink);border-color:rgba(160,120,24,0.3);}
+.parse-field-btn.selected{background:var(--goldP);border-color:rgba(160,120,24,0.5);color:var(--goldD);font-weight:600;}
+.parse-field-btn.correct{background:rgba(42,122,74,0.12);border-color:rgba(42,122,74,0.4);color:#1A5A38;font-weight:600;}
+.parse-field-btn.wrong{background:rgba(176,48,48,0.08);border-color:rgba(176,48,48,0.3);color:#8B1A2A;}
+
+/* Stats */
+.stat-book-row{display:flex;align-items:center;gap:12px;margin-bottom:12px;}
+.stat-book-name{font-family:'Cinzel',serif;font-size:11px;letter-spacing:.06em;min-width:100px;color:var(--pap-ink);}
+.stat-book-bar{flex:1;height:6px;background:rgba(0,0,0,0.07);border-radius:6px;overflow:hidden;}
+.stat-book-fill{height:100%;border-radius:6px;background:linear-gradient(90deg,var(--gold),var(--crimson));transition:width .7s ease;}
+.stat-book-pct{font-family:'Cinzel',serif;font-size:10px;color:var(--pap-muted);min-width:34px;text-align:right;}
+
+/* Empty state */
+.empty-state{text-align:center;padding:48px 20px;}
+.empty-gk{font-size:48px;color:rgba(160,120,24,0.2);margin-bottom:12px;}
+.empty-title{font-family:'Cinzel',serif;font-size:13px;letter-spacing:.1em;color:var(--pap-muted);margin-bottom:8px;text-transform:uppercase;}
+.empty-sub{font-size:13px;color:var(--pap-muted2);font-style:italic;}
+
+/* Toast */
+.toast{
+  position:fixed;top:20px;left:50%;transform:translateX(-50%);z-index:300;
+  background:var(--pap-ink);color:var(--pap);border-radius:10px;
+  padding:10px 22px;font-size:12px;letter-spacing:.06em;white-space:nowrap;
+  box-shadow:0 6px 24px rgba(0,0,0,.35);opacity:0;transition:opacity .3s;
+  pointer-events:none;font-family:'Cinzel',serif;
+}
+.toast.show{opacity:1;}
+
+/* Modal */
+.modal-overlay{
+  position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:200;
+  display:flex;align-items:center;justify-content:center;padding:24px;
+  backdrop-filter:blur(4px);
+}
+.modal-overlay.hidden{display:none;}
+.modal{
+  background:var(--pap);border:2px solid var(--gold);border-radius:18px;
+  padding:32px;max-width:440px;width:100%;max-height:88vh;overflow-y:auto;
+  box-shadow:0 24px 80px rgba(0,0,0,.4);
+}
+.modal-title{font-family:'Cinzel Decorative','Cinzel',serif;font-size:18px;color:var(--goldD);margin-bottom:6px;}
+.modal-sub{font-size:13px;color:var(--pap-muted);font-style:italic;margin-bottom:22px;}
+
+/* Add tab mode buttons */
+.add-mode-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:22px;}
+.add-mode-btn{
+  border-radius:12px;padding:18px 10px;cursor:pointer;text-align:center;
+  border:1.5px solid var(--border);background:var(--card);transition:all .2s;
+}
+.add-mode-btn:hover{border-color:rgba(160,120,24,0.35);transform:translateY(-1px);}
+.add-mode-btn.active{background:var(--goldP);border-color:rgba(160,120,24,0.5);}
+.add-mode-icon{font-size:24px;margin-bottom:8px;}
+.add-mode-label{font-family:'Cinzel',serif;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--pap-ink);margin-bottom:3px;}
+.add-mode-desc{font-size:11px;color:var(--pap-muted);line-height:1.35;}
+
+/* Spinner */
+.spinner{display:inline-block;width:14px;height:14px;border:2px solid rgba(160,120,24,0.2);border-top-color:var(--gold);border-radius:50%;animation:spin .7s linear infinite;vertical-align:middle;}
+@keyframes spin{to{transform:rotate(360deg);}}
+
+/* Add tab forms */
+.add-form{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:22px 20px;margin-bottom:16px;}
+.add-preview{background:var(--card2);border:1.5px solid rgba(160,120,24,0.35);border-radius:12px;padding:18px 18px 14px;margin-top:14px;}
+.add-preview-gk{font-size:34px;font-weight:700;color:var(--goldD);margin-bottom:4px;}
+.add-preview-art{font-size:13px;color:var(--pap-muted);font-style:italic;margin-bottom:6px;}
+.add-preview-gl{font-size:16px;color:var(--pap-ink);font-weight:600;margin-bottom:6px;}
+.add-preview-row{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:5px;}
+.add-preview-label{font-family:'Cinzel',serif;font-size:8px;letter-spacing:.14em;text-transform:uppercase;color:var(--pap-muted);margin-bottom:2px;}
+.add-preview-val{font-size:12px;color:var(--pap-ink);}
+.bulk-ta{width:100%;min-height:140px;border:1px solid var(--border);border-radius:10px;padding:12px 14px;font-size:13px;resize:vertical;background:var(--card);color:var(--pap-ink);font-family:'Cormorant Garamond',Georgia,serif;line-height:1.6;}
+.bulk-ta:focus{outline:none;border-color:rgba(160,120,24,0.45);}
+.bulk-result{display:flex;align-items:center;gap:10px;padding:8px 12px;border-radius:8px;margin-bottom:5px;font-size:13px;}
+.bulk-result.ok{background:rgba(42,122,74,0.07);border:1px solid rgba(42,122,74,0.18);}
+.bulk-result.err{background:rgba(176,48,48,0.06);border:1px solid rgba(176,48,48,0.16);color:var(--pap-muted);}
+.bulk-result-gk{font-size:18px;color:var(--goldD);font-weight:600;min-width:100px;}
+.api-missing{background:rgba(176,48,48,0.06);border:1px solid rgba(176,48,48,0.2);border-radius:10px;padding:16px 18px;font-size:12px;color:var(--pap-muted);line-height:1.7;}
+.api-missing strong{color:var(--l1);}
+.inp:focus{outline:none;border-color:rgba(160,120,24,0.5);}
+.inp-gk{font-size:22px;font-family:'Cormorant Garamond',Georgia,serif;}
+
+/* Settings gear */
+.settings-btn{
+  position:absolute;top:32px;right:40px;background:transparent;border:none;
+  cursor:pointer;color:var(--pap-muted);font-size:16px;opacity:0.5;transition:opacity .2s;
+}
+.settings-btn:hover{opacity:1;}
+
+/* ═══ STUDY SESSION ═══ */
+.session-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;}
+.session-prog-text{font-family:'Cinzel',serif;font-size:11px;color:var(--pap-muted);letter-spacing:.08em;}
+.session-word-gk{font-size:58px;font-weight:700;color:var(--goldD);text-align:center;line-height:1.1;margin-bottom:6px;}
+.session-word-art{font-size:17px;color:var(--pap-muted);text-align:center;font-style:italic;}
+.session-tap-hint{font-family:'Cinzel',serif;font-size:10px;letter-spacing:.16em;color:rgba(160,120,24,0.5);text-align:center;text-transform:uppercase;position:absolute;bottom:22px;width:100%;}
+.session-back-def{font-size:26px;font-weight:600;color:var(--pap-ink);text-align:center;margin-bottom:10px;line-height:1.3;width:100%;}
+.session-back-mo{font-size:12px;color:var(--pap-muted);text-align:center;margin:6px 0;font-style:italic;}
+.session-back-box{font-family:'Cinzel',serif;font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:var(--pap-muted2);text-align:center;margin-top:10px;}
+.session-hint-bar{text-align:center;margin-bottom:14px;}
+.session-hint-txt{font-family:'Cinzel',serif;font-size:10px;letter-spacing:.14em;color:var(--pap-muted2);text-transform:uppercase;}
+.session-end{text-align:center;padding:28px 16px;}
+.session-end-gk{font-size:42px;color:rgba(160,120,24,0.25);margin-bottom:10px;}
+.session-end-title{font-family:'Cinzel Decorative','Cinzel',serif;font-size:20px;color:var(--goldD);margin-bottom:4px;}
+.session-end-sub{font-size:13px;color:var(--pap-muted);margin-bottom:22px;font-style:italic;}
+.session-end-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:22px;}
+.session-stat-box{border-radius:10px;padding:13px 6px;text-align:center;border:1px solid var(--border);}
+.session-stat-num{font-family:'Cinzel',serif;font-size:22px;font-weight:700;line-height:1;}
+.session-stat-lbl{font-size:9px;text-transform:uppercase;letter-spacing:.1em;color:var(--pap-muted);margin-top:3px;}
+.due-dot{display:inline-block;width:6px;height:6px;border-radius:50%;background:currentColor;margin-left:5px;vertical-align:middle;}
+.review-due-btn{margin-top:16px;text-align:center;}
+.box-card-due{box-shadow:0 0 0 1px rgba(201,160,37,0.2);}
+
+/* ═══ LEXICON ═══ */
+.lex-toolbar{margin-bottom:16px;}
+.lex-filter-row{display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap;margin-top:10px;}
+.lex-pos-pills{display:flex;gap:5px;flex-wrap:wrap;}
+.lex-pill{border-radius:20px;border:1px solid var(--border);padding:5px 14px;font-size:10.5px;cursor:pointer;color:var(--pap-muted);background:transparent;transition:all .2s;letter-spacing:.06em;font-family:'Cinzel',serif;}
+.lex-pill:hover{color:var(--pap-ink);border-color:rgba(160,120,24,0.3);}
+.lex-pill.active{background:var(--goldP);border-color:rgba(160,120,24,0.5);color:var(--goldD);}
+.lex-sort-row{display:flex;gap:5px;}
+.lex-sort-btn{font-family:'Cinzel',serif;font-size:10px;letter-spacing:.06em;padding:6px 12px;}
+.lex-sort-btn.active{background:var(--goldP);border-color:rgba(160,120,24,0.45);color:var(--goldD);}
+.lex-count{font-size:11px;color:var(--pap-muted);font-style:italic;margin-bottom:12px;}
+
+.lex-row{border-radius:10px;border:1px solid var(--border);margin-bottom:6px;overflow:hidden;background:var(--card);transition:border-color .2s;}
+.lex-row:hover{border-color:rgba(160,120,24,0.25);}
+.lex-row.in-study{border-left:3px solid var(--gold);}
+.lex-row-main{display:flex;align-items:center;gap:10px;padding:11px 14px;cursor:pointer;user-select:none;}
+.lex-gk-wrap{min-width:140px;flex-shrink:0;}
+.lex-gk-text{font-size:19px;color:var(--goldD);font-weight:600;line-height:1.1;}
+.lex-art{font-size:11px;color:var(--pap-muted);font-style:italic;margin-left:5px;}
+.lex-gl-wrap{flex:1;font-size:13px;color:var(--pap-ink);line-height:1.3;}
+.lex-occ{font-size:10px;color:var(--pap-muted2);min-width:36px;text-align:right;font-family:'Cinzel',serif;flex-shrink:0;}
+.lex-add-btn{border-radius:7px;border:1px solid rgba(160,120,24,0.4);background:transparent;color:var(--goldL);padding:5px 11px;font-size:10px;cursor:pointer;font-family:'Cinzel',serif;letter-spacing:.05em;transition:all .2s;white-space:nowrap;flex-shrink:0;}
+.lex-add-btn:hover{background:var(--goldP);}
+.lex-in-study-badge{font-size:9px;padding:3px 9px;border-radius:20px;background:var(--goldP);color:var(--goldD);border:1px solid rgba(160,120,24,0.35);font-family:'Cinzel',serif;letter-spacing:.05em;white-space:nowrap;flex-shrink:0;}
+.lex-chevron{color:var(--pap-muted2);font-size:10px;transition:transform .25s;flex-shrink:0;}
+.lex-row.expanded .lex-chevron{transform:rotate(180deg);}
+
+.lex-detail{display:none;padding:14px 16px 16px;border-top:1px solid var(--border);background:var(--card2);}
+.lex-row.expanded .lex-detail{display:block;}
+.lex-detail-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px 18px;margin-bottom:12px;}
+.lex-detail-label{font-family:'Cinzel',serif;font-size:8px;letter-spacing:.14em;text-transform:uppercase;color:var(--pap-muted);margin-bottom:3px;}
+.lex-detail-val{font-size:12px;color:var(--pap-ink);line-height:1.4;}
+.sem-pills{display:flex;flex-wrap:wrap;gap:5px;margin-top:4px;}
+.sem-pill{font-size:10px;padding:3px 10px;border-radius:20px;background:rgba(160,120,24,0.08);border:1px solid rgba(160,120,24,0.22);color:var(--goldD);}
+.lex-box-row{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:12px;padding-top:10px;border-top:1px solid var(--border);}
+.lex-box-row-label{font-family:'Cinzel',serif;font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--pap-muted);flex-shrink:0;}
+.lex-box-btn{border-radius:7px;padding:5px 11px;font-size:10px;cursor:pointer;border:1px solid var(--border);background:transparent;color:var(--pap-muted);font-family:'Cinzel',serif;letter-spacing:.04em;transition:all .2s;}
+.lex-box-btn:hover{border-color:rgba(160,120,24,0.4);color:var(--goldD);background:var(--goldP);}
+.lex-box-btn.is-current{background:var(--goldP);border-color:rgba(160,120,24,0.5);color:var(--goldD);font-weight:600;}
+.lex-remove-btn{margin-left:auto;font-size:10px;padding:5px 11px;border-radius:7px;border:1px solid rgba(176,48,48,0.25);color:var(--l1);background:transparent;cursor:pointer;font-family:'Cinzel',serif;transition:all .2s;}
+.lex-remove-btn:hover{background:rgba(176,48,48,0.07);}
+
+@media(max-width:520px){
+  .pap-header{padding:22px 20px 18px;gap:14px;}
+  .brand-gk{font-size:30px;}
+  .pap-content{padding:20px 20px;}
+  .pap-nav{padding:0 12px;}
+  .nav-btn{font-size:9px;letter-spacing:.06em;}
+  .box-grid{grid-template-columns:repeat(2,1fr);}
+  .rating-grid{grid-template-columns:1fr 1fr;}
+  .add-mode-grid{grid-template-columns:1fr 1fr;}
+}
+</style>
+</head>
+<body>
+<div class="cosmos"></div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<!-- GENERAL MODAL ROOT (session start, prompts, etc.) -->
+<div id="modal-root"></div>
+
+<!-- SETTINGS MODAL -->
+<div class="modal-overlay hidden" id="modal-settings">
+  <div class="modal">
+    <div class="modal-title">⚙ Settings</div>
+    <div class="modal-sub">Configure your ὁ Λόγος workspace</div>
+    <div class="field">
+      <label class="lbl">Anthropic API Key</label>
+      <input class="inp" id="set-apikey" type="password" placeholder="sk-ant-api03-…" autocomplete="off"/>
+      <div style="font-size:10px;color:var(--pap-muted2);margin-top:4px;">Required for Quick Add, Bulk Add &amp; Verse Lookup · stored locally only</div>
+    </div>
+    <div class="field">
+      <label class="lbl">Your PIN (4–8 digits)</label>
+      <input class="inp" id="set-pin" type="text" inputmode="numeric" maxlength="8" placeholder="e.g. 4218"/>
+      <div style="font-size:10px;color:var(--pap-muted2);margin-top:4px;">Connects you to your personal cloud sync space</div>
+    </div>
+    <div style="display:flex;gap:10px;justify-content:flex-end;margin-top:8px;">
+      <button class="btn3" onclick="closeSettings()">Cancel</button>
+      <button class="btn1" onclick="saveSettings()">Save</button>
+    </div>
+  </div>
+</div>
+
+<!-- PAPYRUS -->
+<div class="papyrus">
+  <div class="pap-band pap-band--top">✦ · ✦ · ✦ · ✦ · ✦ · ✦ · ✦ · ✦ · ✦ · ✦ · ✦ · ✦ · ✦ · ✦ · ✦ · ✦ · ✦ · ✦</div>
+
+  <!-- HEADER -->
+  <header class="pap-header" style="position:relative;">
+    <button class="settings-btn" onclick="openSettings()" title="Settings">⚙</button>
+
+    <!-- Left Column -->
+    <svg class="col-svg" width="32" height="92" viewBox="0 0 32 92">
+      <rect x="0" y="0" width="32" height="6"/>
+      <rect x="3" y="6" width="26" height="3"/>
+      <polygon points="3,9 29,9 26,16 6,16"/>
+      <polygon points="6,16 26,16 24,76 8,76"/>
+      <line x1="11" y1="17" x2="10.5" y2="75" stroke-width="0.8" opacity="0.2" style="fill:none;stroke:rgba(0,0,0,0.25)"/>
+      <line x1="16" y1="16" x2="16" y2="76" stroke-width="0.8" opacity="0.2" style="fill:none;stroke:rgba(0,0,0,0.25)"/>
+      <line x1="21" y1="17" x2="21.5" y2="75" stroke-width="0.8" opacity="0.2" style="fill:none;stroke:rgba(0,0,0,0.25)"/>
+      <polygon points="6,76 26,76 28,80 4,80"/>
+      <rect x="2" y="80" width="28" height="4"/>
+      <rect x="0" y="84" width="32" height="6"/>
+      <rect x="0" y="90" width="32" height="2"/>
+    </svg>
+
+    <div class="pap-header-center">
+      <div class="brand-gk">ὁ Λόγος</div>
+      <div class="brand-sub">New Testament · Koine Greek</div>
+    </div>
+
+    <!-- Right Column -->
+    <svg class="col-svg" width="32" height="92" viewBox="0 0 32 92">
+      <rect x="0" y="0" width="32" height="6"/>
+      <rect x="3" y="6" width="26" height="3"/>
+      <polygon points="3,9 29,9 26,16 6,16"/>
+      <polygon points="6,16 26,16 24,76 8,76"/>
+      <line x1="11" y1="17" x2="10.5" y2="75" stroke-width="0.8" style="fill:none;stroke:rgba(0,0,0,0.25)"/>
+      <line x1="16" y1="16" x2="16" y2="76" stroke-width="0.8" style="fill:none;stroke:rgba(0,0,0,0.25)"/>
+      <line x1="21" y1="17" x2="21.5" y2="75" stroke-width="0.8" style="fill:none;stroke:rgba(0,0,0,0.25)"/>
+      <polygon points="6,76 26,76 28,80 4,80"/>
+      <rect x="2" y="80" width="28" height="4"/>
+      <rect x="0" y="84" width="32" height="6"/>
+      <rect x="0" y="90" width="32" height="2"/>
+    </svg>
+  </header>
+
+  <!-- NAV -->
+  <nav class="pap-nav">
+    <button class="nav-btn active" id="nb-study"   onclick="setTab('study')">Study</button>
+    <button class="nav-btn"        id="nb-lexicon" onclick="setTab('lexicon')">Lexicon</button>
+    <button class="nav-btn"        id="nb-add"     onclick="setTab('add')">Add</button>
+    <button class="nav-btn"        id="nb-parse"   onclick="setTab('parse')">Parse</button>
+    <button class="nav-btn"        id="nb-stats"   onclick="setTab('stats')">Stats</button>
+  </nav>
+
+  <!-- CONTENT -->
+  <div class="pap-content">
+
+    <!-- ══ STUDY TAB ══ -->
+    <div class="tab-panel active" id="tab-study">
+      <div class="s-head">Vocab Boxes<div class="s-head-line"></div><span id="study-due-badge"></span></div>
+      <div id="study-today-banner" class="today-banner" style="display:none;"></div>
+      <div class="box-grid" id="study-box-grid"><!-- rendered by JS --></div>
+      <div id="study-session-area"><!-- session or empty state --></div>
+    </div>
+
+    <!-- ══ LEXICON TAB ══ -->
+    <div class="tab-panel" id="tab-lexicon">
+      <div class="s-head">NT Lexicon · 301 Words<div class="s-head-line"></div></div>
+
+      <!-- Toolbar -->
+      <div class="lex-toolbar">
+        <input class="inp lex-search" id="lex-search" placeholder="Search Greek or English…" oninput="onLexSearch(this.value)"/>
+        <div class="lex-filter-row">
+          <div class="lex-pos-pills">
+            <button class="lex-pill active" onclick="setLexPos('all')">All</button>
+            <button class="lex-pill"        onclick="setLexPos('noun')">Nouns</button>
+            <button class="lex-pill"        onclick="setLexPos('verb')">Verbs</button>
+            <button class="lex-pill"        onclick="setLexPos('adj')">Adjectives</button>
+            <button class="lex-pill"        onclick="setLexPos('other')">Other</button>
+          </div>
+          <div class="lex-sort-row">
+            <button class="btn3 lex-sort-btn active" id="sort-freq" onclick="setLexSort('freq')">Freq ↓</button>
+            <button class="btn3 lex-sort-btn"        id="sort-alpha" onclick="setLexSort('alpha')">A–Ω</button>
+          </div>
+        </div>
+        <!-- Croy lesson filter -->
+        <div class="lex-filter-row" style="margin-top:8px;" id="lex-lesson-row">
+          <div class="lex-pos-pills" id="lex-lesson-pills">
+            <button class="lex-pill active" onclick="setLexLesson(null)">All Lessons</button>
+            <button class="lex-pill"        onclick="setLexLesson([1,5])">1–5</button>
+            <button class="lex-pill"        onclick="setLexLesson([6,10])">6–10</button>
+            <button class="lex-pill"        onclick="setLexLesson([11,15])">11–15</button>
+            <button class="lex-pill"        onclick="setLexLesson([16,20])">16–20</button>
+            <button class="lex-pill"        onclick="setLexLesson([21,25])">21–25</button>
+            <button class="lex-pill"        onclick="setLexLesson([26,33])">26–33</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="lex-count" id="lex-count"></div>
+      <div id="lex-list"></div>
+    </div>
+
+    <!-- ══ ADD TAB ══ -->
+    <div class="tab-panel" id="tab-add">
+      <div class="s-head">Add Words<div class="s-head-line"></div></div>
+      <div class="add-mode-grid" id="add-mode-grid">
+        <div class="add-mode-btn active" id="add-mode-manual" onclick="setAddMode('manual')">
+          <div class="add-mode-icon">✍</div>
+          <div class="add-mode-label">Manual</div>
+          <div class="add-mode-desc">Fill in all fields yourself</div>
+        </div>
+        <div class="add-mode-btn" id="add-mode-quick" onclick="setAddMode('quick')">
+          <div class="add-mode-icon">⚡</div>
+          <div class="add-mode-label">Quick Add</div>
+          <div class="add-mode-desc">English → AI generates Greek card</div>
+        </div>
+        <div class="add-mode-btn" id="add-mode-bulk" onclick="setAddMode('bulk')">
+          <div class="add-mode-icon">📋</div>
+          <div class="add-mode-label">Bulk Add</div>
+          <div class="add-mode-desc">One word per line · AI generates all</div>
+        </div>
+        <div class="add-mode-btn" id="add-mode-verse" onclick="setAddMode('verse')">
+          <div class="add-mode-icon">📖</div>
+          <div class="add-mode-label">Verse Lookup</div>
+          <div class="add-mode-desc">Word + verse → original Greek card</div>
+        </div>
+      </div>
+      <div id="add-content"><!-- rendered by JS --></div>
+    </div>
+
+    <!-- ══ PARSE TAB ══ -->
+    <div class="tab-panel" id="tab-parse">
+      <div class="s-head">Parsing Sprints<div class="s-head-line"></div></div>
+      <div id="parse-content"></div>
+    </div>
+
+    <!-- ══ STATS TAB ══ -->
+    <div class="tab-panel" id="tab-stats">
+      <div class="s-head">Progress &amp; Readiness<div class="s-head-line"></div></div>
+      <div id="stats-content"><!-- rendered by JS --></div>
+    </div>
+
+  </div><!-- /pap-content -->
+
+  <div class="pap-band pap-band--bot">✦ · ✦ · ✦ · ✦ · ✦ · ✦ · ✦ · ✦ · ✦ · ✦ · ✦ · ✦ · ✦ · ✦ · ✦ · ✦ · ✦ · ✦</div>
+</div><!-- /papyrus -->
+
+<script>
+// ═══════════════════════════════════════════════════════════════════════════
+// ὁ Λόγος · Koine Greek Vocabulary Machine
+// ═══════════════════════════════════════════════════════════════════════════
+
+// ───────────────────────────────────────────────────────────────────────────
+// LEXICON — 301 NT Greek words used 50+ times
+// Fields: id, gk (lemma), art (article for nouns), occ (NT occurrences),
+//         gl (gloss), pos (part of speech), mo (morphology), ls (Croy lesson)
+//         sem (semantic range — optional, for theologically rich words)
+// ───────────────────────────────────────────────────────────────────────────
+const LEXICON = [
+  {id:1,  gk:'ἄγγελος', art:'ὁ',  occ:175,  gl:'messenger, angel',                    pos:'noun',    mo:'2nd decl., masc.',         ls:6},
+  {id:2,  gk:'ἄγω',               occ:66,   gl:'I lead, bring',                        pos:'verb',    mo:'thematic (-ω)',             ls:10},
+  {id:3,  gk:'ἄλλος',             occ:155,  gl:'other',                                pos:'adj',     mo:'adj., 2-1-2',              ls:8},
+  {id:4,  gk:'ἄν',                occ:166,  gl:'conditional particle (untranslated)',   pos:'particle',mo:'particle',                 ls:23},
+  {id:5,  gk:'ἄνθρωπος',art:'ὁ', occ:548,  gl:'human being, man',                     pos:'noun',    mo:'2nd decl., masc.',         ls:4},
+  {id:6,  gk:'ἄρχω',              occ:85,   gl:'I rule; mid. begin',                   pos:'verb',    mo:'thematic (-ω)',             ls:9},
+  {id:7,  gk:'ἄρτος',  art:'ὁ',  occ:97,   gl:'bread',                                pos:'noun',    mo:'2nd decl., masc.',         ls:7},
+  {id:8,  gk:'ἅγιος',             occ:233,  gl:'holy, sacred',                         pos:'adj',     mo:'adj., 2-1-2',              ls:5},
+  {id:9,  gk:'ἁμαρτία',art:'ἡ',  occ:173,  gl:'sin',                                  pos:'noun',    mo:'1st decl., fem.',          ls:7,  sem:['sin','error','missing the mark','sin nature','offense']},
+  {id:10, gk:'αἴρω',              occ:101,  gl:'I lift up, take up, remove',           pos:'verb',    mo:'thematic (-ω)',             ls:10},
+  {id:11, gk:'αἷμα',   art:'τό', occ:97,   gl:'blood',                                pos:'noun',    mo:'3rd decl., neut.',         ls:17},
+  {id:12, gk:'αἰτέω',             occ:70,   gl:'I ask, demand',                        pos:'verb',    mo:'contract (-εω)',            ls:21},
+  {id:13, gk:'αἰών',   art:'ὁ',  occ:123,  gl:'age, world',                           pos:'noun',    mo:'3rd decl., masc.',         ls:17, sem:['age','era','world','eternity','this present age','the age to come']},
+  {id:14, gk:'αἰώνιος',           occ:70,   gl:'eternal',                              pos:'adj',     mo:'adj., 2-termination',      ls:26},
+  {id:15, gk:'ἀνοίγω',            occ:78,   gl:'I open',                               pos:'verb',    mo:'thematic (-ω)',             ls:12},
+  {id:16, gk:'αὐτός',             occ:5534, gl:'he, she, it; same; -self',             pos:'pronoun', mo:'personal/intensive pronoun',ls:7},
+  {id:17, gk:'ἀδελφός',art:'ὁ',  occ:343,  gl:'brother',                              pos:'noun',    mo:'2nd decl., masc.',         ls:4},
+  {id:18, gk:'ἀφίημι',            occ:142,  gl:'I forgive; let go; leave',             pos:'verb',    mo:'athematic (-μι)',           ls:29},
+  {id:19, gk:'ἀγάπη',  art:'ἡ',  occ:116,  gl:'love',                                 pos:'noun',    mo:'1st decl., fem.',          ls:7,  sem:['love','charity','benevolence','dear affection','self-giving love']},
+  {id:20, gk:'ἀγαπάω',            occ:141,  gl:'I love',                               pos:'verb',    mo:'contract (-αω)',            ls:21},
+  {id:21, gk:'ἀγαπητός',          occ:61,   gl:'beloved',                              pos:'adj',     mo:'adj., 2-1-2',              ls:24},
+  {id:22, gk:'ἀγαθός',            occ:104,  gl:'good',                                 pos:'adj',     mo:'adj., 2-1-2',              ls:5},
+  {id:23, gk:'ἀκολουθέω',         occ:90,   gl:'I follow',                             pos:'verb',    mo:'contract (-εω)',            ls:21},
+  {id:24, gk:'ἀκούω',             occ:427,  gl:'I hear, listen',                       pos:'verb',    mo:'thematic (-ω)',             ls:2},
+  {id:25, gk:'ἀλήθεια',art:'ἡ',  occ:107,  gl:'truth',                                pos:'noun',    mo:'1st decl., fem.',          ls:3,  sem:['truth','reality','genuineness','sincerity']},
+  {id:26, gk:'ἀλλά',              occ:635,  gl:'but, yet, nevertheless',               pos:'conj',    mo:'conjunction',              ls:4},
+  {id:27, gk:'ἀλλήλων',           occ:100,  gl:'one another',                          pos:'pronoun', mo:'reciprocal pronoun',        ls:22},
+  {id:28, gk:'ἀμήν',              occ:126,  gl:'truly, amen, so let it be',            pos:'particle',mo:'interjection/particle',    ls:11},
+  {id:29, gk:'ἀναβαίνω',          occ:81,   gl:'I go up, ascend',                      pos:'verb',    mo:'thematic (-ω)',             ls:10},
+  {id:30, gk:'ἀνήρ',   art:'ὁ',  occ:216,  gl:'man, husband',                         pos:'noun',    mo:'3rd decl., masc.',         ls:17},
+  {id:31, gk:'ἀνίστημι',          occ:107,  gl:'I raise; arise, rise',                 pos:'verb',    mo:'athematic (-μι)',           ls:30},
+  {id:32, gk:'ἀπέρχομαι',         occ:116,  gl:'I depart, go away',                    pos:'verb',    mo:'deponent',                 ls:10},
+  {id:33, gk:'ἀπό',               occ:645,  gl:'from (+ gen.)',                         pos:'prep',    mo:'preposition',              ls:6},
+  {id:34, gk:'ἀπόλλυμι',          occ:90,   gl:'I destroy; mid. perish, die',          pos:'verb',    mo:'athematic (-μι)',           ls:29},
+  {id:35, gk:'ἀπόστολος',art:'ὁ',occ:79,   gl:'apostle, messenger',                   pos:'noun',    mo:'2nd decl., masc.',         ls:10},
+  {id:36, gk:'ἀποκρίνομαι',       occ:231,  gl:'I answer',                             pos:'verb',    mo:'deponent',                 ls:9},
+  {id:37, gk:'ἀποκτείνω',         occ:74,   gl:'I kill',                               pos:'verb',    mo:'thematic (-ω)',             ls:10},
+  {id:38, gk:'ἀπολύω',            occ:65,   gl:'I release; dismiss, send away',        pos:'verb',    mo:'thematic (-ω)',             ls:13},
+  {id:39, gk:'ἀποθνήσκω',         occ:113,  gl:'I die',                                pos:'verb',    mo:'thematic (-ω)',             ls:10},
+  {id:40, gk:'ἀποστέλλω',         occ:131,  gl:'I send',                               pos:'verb',    mo:'thematic (-ω)',             ls:8},
+  {id:41, gk:'ἀρχή',   art:'ἡ',  occ:55,   gl:'beginning; rule, authority',           pos:'noun',    mo:'1st decl., fem.',          ls:24},
+  {id:42, gk:'ἀρχιερεύς',art:'ὁ',occ:122,  gl:'high priest',                          pos:'noun',    mo:'3rd decl., masc.',         ls:25},
+  {id:43, gk:'ἀσπάζομαι',         occ:59,   gl:'I greet',                              pos:'verb',    mo:'deponent',                 ls:19},
+  {id:44, gk:'βάλλω',             occ:122,  gl:'I throw; put, place',                  pos:'verb',    mo:'thematic (-ω)',             ls:6},
+  {id:45, gk:'βαπτίζω',           occ:77,   gl:'I baptize',                            pos:'verb',    mo:'thematic (-ω)',             ls:8},
+  {id:46, gk:'βασιλεία',art:'ἡ', occ:162,  gl:'kingdom',                              pos:'noun',    mo:'1st decl., fem.',          ls:3,  sem:['kingdom','reign','rule','royal domain','sovereignty']},
+  {id:47, gk:'βασιλεύς',art:'ὁ', occ:115,  gl:'king',                                 pos:'noun',    mo:'3rd decl., masc.',         ls:25},
+  {id:48, gk:'βλέπω',             occ:132,  gl:'I see, look at, watch',                pos:'verb',    mo:'thematic (-ω)',             ls:2},
+  {id:49, gk:'χάρις',  art:'ἡ',  occ:155,  gl:'grace, favor',                         pos:'noun',    mo:'3rd decl., fem.',          ls:20, sem:['grace','favor','goodwill','gratitude','gift','unmerited favor']},
+  {id:50, gk:'χαίρω',             occ:74,   gl:'I rejoice',                            pos:'verb',    mo:'thematic (-ω)',             ls:26},
+  {id:51, gk:'χαρά',   art:'ἡ',  occ:59,   gl:'joy',                                  pos:'noun',    mo:'1st decl., fem.',          ls:28},
+  {id:52, gk:'χείρ',   art:'ἡ',  occ:176,  gl:'hand',                                 pos:'noun',    mo:'3rd decl., fem.',          ls:19},
+  {id:53, gk:'Χριστός',art:'ὁ',  occ:529,  gl:'Anointed One, Christ',                 pos:'noun',    mo:'2nd decl., masc.',         ls:0,  sem:['Anointed One','Messiah','Christ','the chosen deliverer']},
+  {id:54, gk:'χρόνος', art:'ὁ',  occ:54,   gl:'time',                                 pos:'noun',    mo:'2nd decl., masc.',         ls:28},
+  {id:55, gk:'δαιμόνιον',art:'τό',occ:63,  gl:'demon; divinity',                      pos:'noun',    mo:'2nd decl., neut.',         ls:11},
+  {id:56, gk:'δέ',                occ:2771, gl:'but, and',                             pos:'particle',mo:'postpositive particle',    ls:4},
+  {id:57, gk:'δέχομαι',           occ:56,   gl:'I receive, take',                      pos:'verb',    mo:'deponent',                 ls:11},
+  {id:58, gk:'δεῖ',               occ:102,  gl:'it is necessary',                      pos:'verb',    mo:'impersonal verb',          ls:13},
+  {id:59, gk:'δεξιός',            occ:54,   gl:'right, right hand',                    pos:'adj',     mo:'adj., 2-1-2',              ls:32},
+  {id:60, gk:'δίδωμι',            occ:416,  gl:'I give',                               pos:'verb',    mo:'athematic (-μι)',           ls:28},
+  {id:61, gk:'δίκαιος',           occ:79,   gl:'righteous, just',                      pos:'adj',     mo:'adj., 2-1-2',              ls:5},
+  {id:62, gk:'διά',               occ:666,  gl:'through (gen.); because of (acc.)',    pos:'prep',    mo:'preposition',              ls:6},
+  {id:63, gk:'διδάσκαλος',art:'ὁ',occ:59,  gl:'teacher',                              pos:'noun',    mo:'2nd decl., masc.',         ls:12},
+  {id:64, gk:'διδάσκω',           occ:95,   gl:'I teach',                              pos:'verb',    mo:'thematic (-ω)',             ls:2},
+  {id:65, gk:'δικαιοσύνη',art:'ἡ',occ:91,  gl:'righteousness',                        pos:'noun',    mo:'1st decl., fem.',          ls:13, sem:['righteousness','justice','right standing before God','justification']},
+  {id:66, gk:'διό',               occ:53,   gl:'therefore',                            pos:'conj',    mo:'conjunction',              ls:31},
+  {id:67, gk:'δόξα',   art:'ἡ',  occ:165,  gl:'glory, splendor, fame',                pos:'noun',    mo:'1st decl., fem.',          ls:3,  sem:['glory','splendor','honor','fame','radiance','divine majesty']},
+  {id:68, gk:'δοκέω',             occ:63,   gl:'I think, believe; seem',               pos:'verb',    mo:'contract (-εω)',            ls:22},
+  {id:69, gk:'δοῦλος', art:'ὁ',  occ:124,  gl:'slave',                                pos:'noun',    mo:'2nd decl., masc.',         ls:4},
+  {id:70, gk:'δοξάζω',            occ:61,   gl:'I glorify, praise',                    pos:'verb',    mo:'thematic (-ω)',             ls:12},
+  {id:71, gk:'δύναμαι',           occ:209,  gl:'I am able, can',                       pos:'verb',    mo:'athematic deponent',        ls:9},
+  {id:72, gk:'δύναμις',art:'ἡ',  occ:118,  gl:'power, ability, miracle',              pos:'noun',    mo:'3rd decl., fem.',          ls:25, sem:['power','ability','miracle','force','mighty work']},
+  {id:73, gk:'δύο',               occ:136,  gl:'two',                                  pos:'numeral', mo:'numeral',                  ls:30},
+  {id:74, gk:'δώδεκα',            occ:75,   gl:'twelve',                               pos:'numeral', mo:'numeral (indeclinable)',    ls:30},
+  {id:75, gk:'ἐρῶ',               occ:96,   gl:'I will say (future of λέγω)',          pos:'verb',    mo:'irregular future',         ls:0},
+  {id:76, gk:'ἔχω',               occ:705,  gl:'I have',                               pos:'verb',    mo:'thematic (-ω)',             ls:3},
+  {id:77, gk:'ἔθνος',  art:'τό', occ:162,  gl:'nation; pl. Gentiles',                 pos:'noun',    mo:'3rd decl., neut.',         ls:25},
+  {id:78, gk:'ἔρχομαι',           occ:631,  gl:'I come, go',                           pos:'verb',    mo:'deponent',                 ls:9},
+  {id:79, gk:'ἔργον',  art:'τό', occ:169,  gl:'work, deed',                           pos:'noun',    mo:'2nd decl., neut.',         ls:4},
+  {id:80, gk:'ἔσχατος',           occ:52,   gl:'last',                                 pos:'adj',     mo:'adj., 2-1-2',              ls:5},
+  {id:81, gk:'ἔτι',               occ:92,   gl:'yet, still',                           pos:'adv',     mo:'adverb',                   ls:11},
+  {id:82, gk:'ἔξω',               occ:62,   gl:'outside',                              pos:'adv',     mo:'adverb/preposition',        ls:27},
+  {id:83, gk:'ἕκαστος',           occ:81,   gl:'each',                                 pos:'adj',     mo:'adj., 2-1-2',              ls:22},
+  {id:84, gk:'ἕτερος',            occ:98,   gl:'other',                                pos:'adj',     mo:'adj., 2-1-2',              ls:15},
+  {id:85, gk:'ἕως',               occ:145,  gl:'until; as far as',                     pos:'conj',    mo:'conjunction/preposition',  ls:17},
+  {id:86, gk:'ἑαυτοῦ',            occ:320,  gl:'oneself',                              pos:'pronoun', mo:'reflexive pronoun',         ls:21},
+  {id:87, gk:'ἑπτά',              occ:87,   gl:'seven',                                pos:'numeral', mo:'numeral (indeclinable)',    ls:30},
+  {id:88, gk:'εἴτε',              occ:65,   gl:'if...if; whether...or',                pos:'conj',    mo:'conjunction',              ls:0},
+  {id:89, gk:'εἶδον',             occ:336,  gl:'I saw (2nd aorist of ὁράω)',           pos:'verb',    mo:'irregular (2nd aorist)',    ls:14},
+  {id:90, gk:'εἷς',               occ:337,  gl:'one',                                  pos:'numeral', mo:'numeral (μία, ἕν)',         ls:29},
+  {id:91, gk:'εἶπον',             occ:925,  gl:'I said (2nd aorist of λέγω)',          pos:'verb',    mo:'irregular (2nd aorist)',    ls:14},
+  {id:92, gk:'εἰ',                occ:513,  gl:'if',                                   pos:'conj',    mo:'conjunction',              ls:12},
+  {id:93, gk:'εἰς',               occ:1753, gl:'into, to (+ acc.)',                    pos:'prep',    mo:'preposition',              ls:6},
+  {id:94, gk:'εἰμί',              occ:2450, gl:'I am',                                 pos:'verb',    mo:'athematic (-μι)',           ls:7},
+  {id:95, gk:'εἰρήνη', art:'ἡ',  occ:91,   gl:'peace',                                pos:'noun',    mo:'1st decl., fem.',          ls:8,  sem:['peace','harmony','tranquility','welfare','shalom (OT concept)']},
+  {id:96, gk:'εἰσέρχομαι',        occ:192,  gl:'I enter, come in, go in',              pos:'verb',    mo:'deponent',                 ls:9},
+  {id:97, gk:'ἐρωτάω',            occ:62,   gl:'I ask',                                pos:'verb',    mo:'contract (-αω)',            ls:26},
+  {id:98, gk:'εὐαγγέλιον',art:'τό',occ:76, gl:'good news, gospel',                    pos:'noun',    mo:'2nd decl., neut.',         ls:20, sem:['good news','gospel','glad tidings','the message of salvation']},
+  {id:99, gk:'εὐαγγελίζω',        occ:54,   gl:'I proclaim the gospel',                pos:'verb',    mo:'thematic (-ω)',             ls:18},
+  {id:100,gk:'εὐθύς',             occ:54,   gl:'immediately, at once',                 pos:'adv',     mo:'adverb',                   ls:28},
+  {id:101,gk:'εὑρίσκω',           occ:176,  gl:'I find',                               pos:'verb',    mo:'thematic (-ω)',             ls:8},
+  {id:102,gk:'ἐάν',               occ:343,  gl:'if (+ subj.)',                          pos:'conj',    mo:'conjunction',              ls:23},
+  {id:103,gk:'ἐγείρω',            occ:143,  gl:'I raise, wake',                        pos:'verb',    mo:'thematic (-ω)',             ls:8},
+  {id:104,gk:'ἐγώ',               occ:1713, gl:'I',                                    pos:'pronoun', mo:'1st person pronoun',        ls:7},
+  {id:105,gk:'ἐκ / ἐξ',           occ:915,  gl:'out of, from (+ gen.)',                pos:'prep',    mo:'preposition',              ls:6},
+  {id:106,gk:'ἐκβάλλω',           occ:81,   gl:'I cast out, send out',                 pos:'verb',    mo:'thematic (-ω)',             ls:16},
+  {id:107,gk:'ἐκεῖ',              occ:95,   gl:'there',                                pos:'adv',     mo:'adverb',                   ls:13},
+  {id:108,gk:'ἐκεῖνος',           occ:243,  gl:'that (demonstrative)',                  pos:'pronoun', mo:'demonstrative pronoun/adj', ls:8},
+  {id:109,gk:'ἐκκλησία',art:'ἡ', occ:114,  gl:'church, assembly',                     pos:'noun',    mo:'1st decl., fem.',          ls:3,  sem:['church','assembly','congregation','the called-out community']},
+  {id:110,gk:'ἐλπίς',  art:'ἡ',  occ:53,   gl:'hope',                                 pos:'noun',    mo:'3rd decl., fem.',          ls:27},
+  {id:111,gk:'ἐμός',              occ:76,   gl:'my, mine',                             pos:'adj',     mo:'possessive adj., 2-1-2',   ls:22},
+  {id:112,gk:'ἐν',                occ:2713, gl:'in, among (+ dat.)',                   pos:'prep',    mo:'preposition',              ls:6},
+  {id:113,gk:'ἐντολή', art:'ἡ',  occ:68,   gl:'commandment',                          pos:'noun',    mo:'1st decl., fem.',          ls:22},
+  {id:114,gk:'ἐνώπιον',           occ:93,   gl:'before, in the presence of',           pos:'prep',    mo:'preposition (+ gen.)',      ls:31},
+  {id:115,gk:'ἐπαγγελία',art:'ἡ',occ:52,   gl:'promise, pledge',                      pos:'noun',    mo:'1st decl., fem.',          ls:31},
+  {id:116,gk:'ἐπερωτάω',          occ:56,   gl:'I ask',                                pos:'verb',    mo:'contract (-αω)',            ls:26},
+  {id:117,gk:'ἐπί',               occ:878,  gl:'on (gen.); at, on (dat.); to, against (acc.)', pos:'prep',mo:'preposition',         ls:11},
+  {id:118,gk:'ἐσθίω',             occ:159,  gl:'I eat',                                pos:'verb',    mo:'thematic (-ω)',             ls:7},
+  {id:119,gk:'ἐξέρχομαι',         occ:216,  gl:'I go out, come out',                   pos:'verb',    mo:'deponent',                 ls:9},
+  {id:120,gk:'ἐξουσία',art:'ἡ',  occ:102,  gl:'authority',                            pos:'noun',    mo:'1st decl., fem.',          ls:8,  sem:['authority','power','right','jurisdiction','freedom to act']},
+  {id:121,gk:'φέρω',              occ:68,   gl:'I carry, bear, bring',                 pos:'verb',    mo:'thematic (-ω)',             ls:12},
+  {id:122,gk:'φημί',              occ:66,   gl:'I say',                                pos:'verb',    mo:'athematic (-μι)',           ls:30},
+  {id:123,gk:'φοβέομαι',          occ:95,   gl:'I fear',                               pos:'verb',    mo:'deponent contract (-εο)',   ls:21},
+  {id:124,gk:'φῶς',    art:'τό', occ:73,   gl:'light',                                pos:'noun',    mo:'3rd decl., neut.',         ls:22},
+  {id:125,gk:'φωνή',   art:'ἡ',  occ:137,  gl:'voice, sound',                         pos:'noun',    mo:'1st decl., fem.',          ls:3},
+  {id:126,gk:'γάρ',               occ:1036, gl:'for; certainly, so then',              pos:'particle',mo:'postpositive particle',    ls:5},
+  {id:127,gk:'γεννάω',            occ:97,   gl:'I beget, bear, produce',               pos:'verb',    mo:'contract (-αω)',            ls:21},
+  {id:128,gk:'γῆ',     art:'ἡ',  occ:248,  gl:'land, earth, ground',                  pos:'noun',    mo:'1st decl., fem.',          ls:3},
+  {id:129,gk:'γίνομαι',           occ:667,  gl:'I become, come to be, happen',         pos:'verb',    mo:'deponent',                 ls:9},
+  {id:130,gk:'γινώσκω',           occ:221,  gl:'I know',                               pos:'verb',    mo:'thematic (-ω)',             ls:2},
+  {id:131,gk:'γλῶσσα', art:'ἡ',  occ:50,   gl:'tongue, language',                     pos:'noun',    mo:'1st decl., fem.',          ls:24},
+  {id:132,gk:'γράφω',             occ:190,  gl:'I write',                              pos:'verb',    mo:'thematic (-ω)',             ls:2},
+  {id:133,gk:'γραφή',  art:'ἡ',  occ:50,   gl:'Scripture, writing',                   pos:'noun',    mo:'1st decl., fem.',          ls:23, sem:['Scripture','writing','a written text','the Scriptures (OT)']},
+  {id:134,gk:'γραμματεύς',art:'ὁ',occ:62,  gl:'scribe, expert in the law',            pos:'noun',    mo:'3rd decl., masc.',         ls:25},
+  {id:135,gk:'γυνή',   art:'ἡ',  occ:209,  gl:'woman, wife',                          pos:'noun',    mo:'3rd decl., fem.',          ls:17},
+  {id:136,gk:'ἤ',                 occ:342,  gl:'or; than',                             pos:'conj',    mo:'conjunction',              ls:31},
+  {id:137,gk:'ἤδη',               occ:60,   gl:'already',                              pos:'adv',     mo:'adverb',                   ls:13},
+  {id:138,gk:'ἡμέρα',  art:'ἡ',  occ:388,  gl:'day',                                  pos:'noun',    mo:'1st decl., fem.',          ls:3},
+  {id:139,gk:'ἡμεῖς',             occ:856,  gl:'we',                                   pos:'pronoun', mo:'1st person pl. pronoun',    ls:7},
+  {id:140,gk:'ἴδιος',             occ:113,  gl:'one\'s own',                           pos:'adj',     mo:'adj., 2-1-2',              ls:13},
+  {id:141,gk:'ἵστημι',            occ:152,  gl:'I stand, stop; place, set',            pos:'verb',    mo:'athematic (-μι)',           ls:30},
+  {id:142,gk:'ἵνα',               occ:673,  gl:'in order that; so that',               pos:'conj',    mo:'purpose/result conjunction',ls:23},
+  {id:143,gk:'ἱερόν',  art:'τό', occ:70,   gl:'temple',                               pos:'noun',    mo:'2nd decl., neut.',         ls:10},
+  {id:144,gk:'ἱμάτιον',art:'τό', occ:60,   gl:'coat, garment',                        pos:'noun',    mo:'2nd decl., neut.',         ls:13},
+  {id:145,gk:'ἰδού',              occ:200,  gl:'behold! look!',                        pos:'particle',mo:'interjection/particle',    ls:11},
+  {id:146,gk:'κάθημαι',           occ:91,   gl:'I sit',                                pos:'verb',    mo:'deponent',                 ls:18},
+  {id:147,gk:'καί',               occ:8947, gl:'and, also, even',                      pos:'conj',    mo:'conjunction/particle',     ls:2},
+  {id:148,gk:'καιρός', art:'ὁ',  occ:85,   gl:'season, time',                         pos:'noun',    mo:'2nd decl., masc.',         ls:32, sem:['season','appointed time','the right moment','a decisive time']},
+  {id:149,gk:'κακός',             occ:50,   gl:'bad, evil',                            pos:'adj',     mo:'adj., 2-1-2',              ls:5},
+  {id:150,gk:'καλέω',             occ:148,  gl:'I call',                               pos:'verb',    mo:'contract (-εω)',            ls:21},
+  {id:151,gk:'καλός',             occ:99,   gl:'good, beautiful',                      pos:'adj',     mo:'adj., 2-1-2',              ls:5},
+  {id:152,gk:'καθώς',             occ:178,  gl:'just as, even as',                     pos:'conj',    mo:'conjunction/adverb',        ls:27},
+  {id:153,gk:'καρδία', art:'ἡ',  occ:156,  gl:'heart',                                pos:'noun',    mo:'1st decl., fem.',          ls:3},
+  {id:154,gk:'καρπός', art:'ὁ',  occ:66,   gl:'fruit',                                pos:'noun',    mo:'2nd decl., masc.',         ls:26},
+  {id:155,gk:'κατά',              occ:471,  gl:'against, down (gen.); according to (acc.)', pos:'prep',mo:'preposition',            ls:7},
+  {id:156,gk:'καταβαίνω',         occ:81,   gl:'I go down, come down',                 pos:'verb',    mo:'thematic (-ω)',             ls:10},
+  {id:157,gk:'κἀγώ',              occ:84,   gl:'and I, I also',                        pos:'pronoun', mo:'crasis (καί + ἐγώ)',        ls:0},
+  {id:158,gk:'κεφαλή', art:'ἡ',  occ:75,   gl:'head',                                 pos:'noun',    mo:'1st decl., fem.',          ls:13},
+  {id:159,gk:'κηρύσσω',           occ:61,   gl:'I proclaim, preach',                   pos:'verb',    mo:'thematic (-ω)',             ls:12},
+  {id:160,gk:'κόσμος', art:'ὁ',  occ:185,  gl:'world; adornment',                     pos:'noun',    mo:'2nd decl., masc.',         ls:6,  sem:['world','universe','ordered creation','humankind','the evil world system','adornment']},
+  {id:161,gk:'κράζω',             occ:55,   gl:'I cry out, scream',                    pos:'verb',    mo:'thematic (-ω)',             ls:13},
+  {id:162,gk:'κρίνω',             occ:114,  gl:'I judge',                              pos:'verb',    mo:'thematic (-ω)',             ls:8},
+  {id:163,gk:'κύριος', art:'ὁ',  occ:718,  gl:'lord, master',                         pos:'noun',    mo:'2nd decl., masc.',         ls:4,  sem:['lord','master','sir','the Lord (YHWH)','owner']},
+  {id:164,gk:'λαλέω',             occ:298,  gl:'I speak',                              pos:'verb',    mo:'contract (-εω)',            ls:21},
+  {id:165,gk:'λαμβάνω',           occ:258,  gl:'I receive, take',                      pos:'verb',    mo:'thematic (-ω)',             ls:5},
+  {id:166,gk:'λαός',   art:'ὁ',  occ:141,  gl:'people',                               pos:'noun',    mo:'2nd decl., masc.',         ls:8,  sem:['people','nation','crowd','the people of God']},
+  {id:167,gk:'λέγω',              occ:1318, gl:'I say, speak',                         pos:'verb',    mo:'thematic (-ω)',             ls:2},
+  {id:168,gk:'λίθος',  art:'ὁ',  occ:58,   gl:'stone',                                pos:'noun',    mo:'2nd decl., masc.',         ls:6},
+  {id:169,gk:'λόγος',  art:'ὁ',  occ:331,  gl:'word; matter; reason',                 pos:'noun',    mo:'2nd decl., masc.',         ls:4,  sem:['word','message','matter','account','reason','divine expression (John 1)']},
+  {id:170,gk:'λοιπός',            occ:55,   gl:'the rest; finally',                    pos:'adj',     mo:'adj., 2-1-2',              ls:29},
+  {id:171,gk:'μᾶλλον',            occ:80,   gl:'more, rather',                         pos:'adv',     mo:'adverb (comparative)',      ls:31},
+  {id:172,gk:'μακάριος',          occ:50,   gl:'blessed, fortunate, happy',            pos:'adj',     mo:'adj., 2-1-2',              ls:31},
+  {id:173,gk:'μαθητής',art:'ὁ',  occ:262,  gl:'disciple, pupil',                      pos:'noun',    mo:'1st decl., masc.',         ls:6},
+  {id:174,gk:'μαρτυρέω',          occ:76,   gl:'I bear witness, testify',              pos:'verb',    mo:'contract (-εω)',            ls:24},
+  {id:175,gk:'μέγας',             occ:194,  gl:'great, large',                         pos:'adj',     mo:'adj., irregular (μεγάλη, μέγα)',ls:28},
+  {id:176,gk:'μέλλω',             occ:110,  gl:'I am about to, going to',              pos:'verb',    mo:'thematic (-ω)',             ls:10},
+  {id:177,gk:'μέν',               occ:181,  gl:'on the one hand; often untranslated',  pos:'particle',mo:'postpositive particle',    ls:11},
+  {id:178,gk:'μένω',              occ:118,  gl:'I remain, stay, abide',                pos:'verb',    mo:'thematic (-ω)',             ls:6},
+  {id:179,gk:'μέσος',             occ:56,   gl:'middle, in the middle of',             pos:'adj',     mo:'adj., 2-1-2',              ls:32},
+  {id:180,gk:'μετά',              occ:467,  gl:'after (acc.); with (gen.)',             pos:'prep',    mo:'preposition',              ls:6},
+  {id:181,gk:'μή',                occ:1055, gl:'not (with non-indicative moods)',       pos:'particle',mo:'negative particle',        ls:18},
+  {id:182,gk:'μήτηρ',  art:'ἡ',  occ:84,   gl:'mother',                               pos:'noun',    mo:'3rd decl., fem.',          ls:19},
+  {id:183,gk:'μηδέ',              occ:57,   gl:'and not, but not; not even',           pos:'conj',    mo:'conjunction/particle',     ls:23},
+  {id:184,gk:'μηδείς',            occ:85,   gl:'no one, nothing',                      pos:'pronoun', mo:'pronoun (μή + εἷς)',        ls:29},
+  {id:185,gk:'μόνος',             occ:66,   gl:'alone, only',                          pos:'adj',     mo:'adj., 2-1-2',              ls:31},
+  {id:186,gk:'νεκρός',            occ:128,  gl:'dead',                                 pos:'adj',     mo:'adj., 2-1-2',              ls:5},
+  {id:187,gk:'νόμος',  art:'ὁ',  occ:191,  gl:'law',                                  pos:'noun',    mo:'2nd decl., masc.',         ls:4,  sem:['law','the Law (Torah)','principle','rule','the Mosaic Law']},
+  {id:188,gk:'νύξ',    art:'ἡ',  occ:61,   gl:'night',                                pos:'noun',    mo:'3rd decl., fem.',          ls:17},
+  {id:189,gk:'νῦν',               occ:148,  gl:'now',                                  pos:'adv',     mo:'adverb',                   ls:12},
+  {id:190,gk:'ὄχλος',  art:'ὁ',  occ:174,  gl:'crowd',                                pos:'noun',    mo:'2nd decl., masc.',         ls:7},
+  {id:191,gk:'ὄνομα',  art:'τό', occ:228,  gl:'name',                                 pos:'noun',    mo:'3rd decl., neut.',         ls:17},
+  {id:192,gk:'ὄρος',   art:'τό', occ:62,   gl:'mountain',                             pos:'noun',    mo:'3rd decl., neut.',         ls:25},
+  {id:193,gk:'ὅς, ἥ, ὅ',         occ:1369, gl:'who, which, that',                     pos:'pronoun', mo:'relative pronoun',         ls:27},
+  {id:194,gk:'ὅλος',              occ:108,  gl:'whole, entire, complete',              pos:'adj',     mo:'adj., 2-1-2',              ls:13},
+  {id:195,gk:'ὅπου',              occ:82,   gl:'where',                                pos:'adv',     mo:'adverb/conjunction',        ls:22},
+  {id:196,gk:'ὅπως',              occ:53,   gl:'in order to; how',                     pos:'conj',    mo:'conjunction',              ls:23},
+  {id:197,gk:'ὅσος',              occ:110,  gl:'as great as, as much as',              pos:'adj',     mo:'adj., 2-1-2',              ls:27},
+  {id:198,gk:'ὅστις',             occ:154,  gl:'whoever, who',                         pos:'pronoun', mo:'indefinite relative pronoun',ls:27},
+  {id:199,gk:'ὅταν',              occ:123,  gl:'whenever, when',                       pos:'conj',    mo:'temporal conjunction',     ls:23},
+  {id:200,gk:'ὅτε',               occ:102,  gl:'when, while',                          pos:'conj',    mo:'temporal conjunction',     ls:23},
+  {id:201,gk:'ὅτι',               occ:1285, gl:'because; that',                        pos:'conj',    mo:'conjunction',              ls:2},
+  {id:202,gk:'ὁ, ἡ, τό',         occ:19734,gl:'the',                                  pos:'article', mo:'definite article',         ls:5},
+  {id:203,gk:'ὁδός',   art:'ἡ',  occ:101,  gl:'road, way',                            pos:'noun',    mo:'2nd decl., fem.',          ls:6,  sem:['road','way','path','manner of life','the Way (early Christian term)']},
+  {id:204,gk:'ὁράω',              occ:114,  gl:'I see',                                pos:'verb',    mo:'contract (-αω)',            ls:21},
+  {id:205,gk:'οἶκος',  art:'ὁ',  occ:112,  gl:'house, household',                     pos:'noun',    mo:'2nd decl., masc.',         ls:4},
+  {id:206,gk:'οἶδα',              occ:321,  gl:'I know',                               pos:'verb',    mo:'perfect used as present',  ls:27},
+  {id:207,gk:'οἰκία',  art:'ἡ',  occ:94,   gl:'house',                                pos:'noun',    mo:'1st decl., fem.',          ls:0},
+  {id:208,gk:'οὔτε',              occ:91,   gl:'neither, nor',                         pos:'conj',    mo:'conjunction',              ls:11},
+  {id:209,gk:'οὕτως',             occ:208,  gl:'thus, so, in this way',                pos:'adv',     mo:'adverb',                   ls:8},
+  {id:210,gk:'οὖν',               occ:493,  gl:'therefore, then',                      pos:'particle',mo:'postpositive particle',    ls:8},
+  {id:211,gk:'οὗτος',             occ:1388, gl:'this (demonstrative)',                  pos:'pronoun', mo:'demonstrative pronoun/adj', ls:8},
+  {id:212,gk:'οὐ / οὐκ / οὐχ',   occ:1619, gl:'not',                                  pos:'particle',mo:'negative particle (indicative)',ls:5},
+  {id:213,gk:'οὐχί',              occ:53,   gl:'not, no (emphatic)',                    pos:'particle',mo:'emphatic negative particle',ls:31},
+  {id:214,gk:'οὐδέ',              occ:139,  gl:'and not, not even',                    pos:'conj',    mo:'conjunction/particle',     ls:9},
+  {id:215,gk:'οὐδείς',            occ:226,  gl:'no one, nothing',                      pos:'pronoun', mo:'pronoun (οὐ + εἷς)',        ls:29},
+  {id:216,gk:'οὐρανός',art:'ὁ',  occ:272,  gl:'heaven',                               pos:'noun',    mo:'2nd decl., masc.',         ls:4,  sem:['heaven','sky','the heavens','God\'s dwelling place']},
+  {id:217,gk:'ὀφθαλμός',art:'ὁ', occ:100,  gl:'eye',                                  pos:'noun',    mo:'2nd decl., masc.',         ls:11},
+  {id:218,gk:'πάλιν',             occ:139,  gl:'again',                                pos:'adv',     mo:'adverb',                   ls:11},
+  {id:219,gk:'πᾶς',               occ:1226, gl:'all, every',                           pos:'adj',     mo:'adj., 3rd/1st decl. (πᾶσα, πᾶν)',ls:21},
+  {id:220,gk:'παιδίον',art:'τό', occ:52,   gl:'child, little child',                  pos:'noun',    mo:'2nd decl., neut.',         ls:24},
+  {id:221,gk:'παρά',              occ:191,  gl:'beside, near (dat.); from (gen.); alongside (acc.)',pos:'prep',mo:'preposition',     ls:10},
+  {id:222,gk:'παραβολή',art:'ἡ', occ:50,   gl:'parable',                              pos:'noun',    mo:'1st decl., fem.',          ls:24},
+  {id:223,gk:'παραδίδωμι',        occ:120,  gl:'I hand over, betray, pass on',         pos:'verb',    mo:'athematic (-μι)',           ls:28},
+  {id:224,gk:'παρακαλέω',         occ:109,  gl:'I comfort; exhort; request',           pos:'verb',    mo:'contract (-εω)',            ls:21, sem:['comfort','exhort','urge','encourage','beseech','call alongside']},
+  {id:225,gk:'πατήρ',  art:'ὁ',  occ:415,  gl:'father',                               pos:'noun',    mo:'3rd decl., masc.',         ls:19},
+  {id:226,gk:'πέμπω',             occ:79,   gl:'I send',                               pos:'verb',    mo:'thematic (-ω)',             ls:6},
+  {id:227,gk:'πείθω',             occ:52,   gl:'I persuade; mid. trust, obey',         pos:'verb',    mo:'thematic (-ω)',             ls:13},
+  {id:228,gk:'περί',              occ:331,  gl:'about, concerning (gen.); around (acc.)',pos:'prep',  mo:'preposition',              ls:6},
+  {id:229,gk:'περιπατέω',         occ:95,   gl:'I walk',                               pos:'verb',    mo:'contract (-εω)',            ls:21},
+  {id:230,gk:'πίνω',              occ:73,   gl:'I drink',                              pos:'verb',    mo:'thematic (-ω)',             ls:14},
+  {id:231,gk:'πίπτω',             occ:90,   gl:'I fall',                               pos:'verb',    mo:'thematic (-ω)',             ls:14},
+  {id:232,gk:'πίστις', art:'ἡ',  occ:243,  gl:'faith',                                pos:'noun',    mo:'3rd decl., fem.',          ls:25, sem:['faith','belief','trust','faithfulness','the Christian faith']},
+  {id:233,gk:'πιστεύω',           occ:241,  gl:'I believe',                            pos:'verb',    mo:'thematic (-ω)',             ls:2},
+  {id:234,gk:'πιστός',            occ:67,   gl:'faithful',                             pos:'adj',     mo:'adj., 2-1-2',              ls:5},
+  {id:235,gk:'πλείων',            occ:55,   gl:'more, greater',                        pos:'adj',     mo:'adj., comparative (3rd decl.)',ls:31},
+  {id:236,gk:'πληρόω',            occ:86,   gl:'I fulfill, fill',                      pos:'verb',    mo:'contract (-οω)',            ls:21},
+  {id:237,gk:'πλοῖον', art:'τό', occ:66,   gl:'boat',                                 pos:'noun',    mo:'2nd decl., neut.',         ls:7},
+  {id:238,gk:'πνεῦμα', art:'τό', occ:379,  gl:'spirit, wind, breath',                 pos:'noun',    mo:'3rd decl., neut.',         ls:17, sem:['spirit','wind','breath','Spirit (Holy Spirit)','spiritual being']},
+  {id:239,gk:'πόλις',  art:'ἡ',  occ:161,  gl:'city',                                 pos:'noun',    mo:'3rd decl., fem.',          ls:25},
+  {id:240,gk:'ποιέω',             occ:565,  gl:'I do, make',                           pos:'verb',    mo:'contract (-εω)',            ls:21},
+  {id:241,gk:'πολύς',             occ:353,  gl:'many, much',                           pos:'adj',     mo:'adj., irregular (πολλή, πολύ)',ls:28},
+  {id:242,gk:'πονηρός',           occ:78,   gl:'evil, wicked',                         pos:'adj',     mo:'adj., 2-1-2',              ls:5},
+  {id:243,gk:'πορεύομαι',         occ:150,  gl:'I go, come',                           pos:'verb',    mo:'deponent',                 ls:9},
+  {id:244,gk:'πούς',   art:'ὁ',  occ:93,   gl:'foot',                                 pos:'noun',    mo:'3rd decl., masc.',         ls:19},
+  {id:245,gk:'πρεσβύτερος',       occ:65,   gl:'elder, older',                         pos:'adj',     mo:'adj./noun, 2nd decl.',     ls:28},
+  {id:246,gk:'πρός',              occ:696,  gl:'to, toward (acc.); near (dat./gen.)',  pos:'prep',    mo:'preposition',              ls:6},
+  {id:247,gk:'πρόσωπον',art:'τό',occ:74,   gl:'face',                                 pos:'noun',    mo:'2nd decl., neut.',         ls:8},
+  {id:248,gk:'προφήτης',art:'ὁ', occ:144,  gl:'prophet',                              pos:'noun',    mo:'1st decl., masc.',         ls:6},
+  {id:249,gk:'προσέρχομαι',       occ:87,   gl:'I approach, come or go to',            pos:'verb',    mo:'deponent',                 ls:14},
+  {id:250,gk:'προσεύχομαι',       occ:86,   gl:'I pray',                               pos:'verb',    mo:'deponent',                 ls:12},
+  {id:251,gk:'προσκυνέω',         occ:59,   gl:'I worship, fall down before',          pos:'verb',    mo:'contract (-εω)',            ls:22},
+  {id:252,gk:'πρῶτος',            occ:92,   gl:'first',                                pos:'adj',     mo:'adj., superlative 2-1-2',  ls:5},
+  {id:253,gk:'πρῶτον',            occ:60,   gl:'first',                                pos:'adv',     mo:'adverb',                   ls:5},
+  {id:254,gk:'πῦρ',    art:'τό', occ:71,   gl:'fire',                                 pos:'noun',    mo:'3rd decl., neut.',         ls:22},
+  {id:255,gk:'πῶς',               occ:104,  gl:'how?, in what way?',                   pos:'adv',     mo:'interrogative adverb',     ls:16},
+  {id:256,gk:'θάλασσα',art:'ἡ',  occ:91,   gl:'lake, sea',                            pos:'noun',    mo:'1st decl., fem.',          ls:3},
+  {id:257,gk:'θάνατος',art:'ὁ',  occ:120,  gl:'death',                                pos:'noun',    mo:'2nd decl., masc.',         ls:4},
+  {id:258,gk:'θέλημα', art:'τό', occ:62,   gl:'will',                                 pos:'noun',    mo:'3rd decl., neut.',         ls:17},
+  {id:259,gk:'θέλω',              occ:207,  gl:'I wish, want',                         pos:'verb',    mo:'thematic (-ω)',             ls:2},
+  {id:260,gk:'θεός',   art:'ὁ',  occ:1314, gl:'God, god',                             pos:'noun',    mo:'2nd decl., masc.',         ls:4,  sem:['God','god','divine being','the one true God']},
+  {id:261,gk:'θεωρέω',            occ:58,   gl:'I behold, observe, see',               pos:'verb',    mo:'contract (-εω)',            ls:24},
+  {id:262,gk:'θρόνος', art:'ὁ',  occ:62,   gl:'throne',                               pos:'noun',    mo:'2nd decl., masc.',         ls:13},
+  {id:263,gk:'ῥῆμα',   art:'τό', occ:68,   gl:'word; thing; matter',                  pos:'noun',    mo:'3rd decl., neut.',         ls:17},
+  {id:264,gk:'σάββατον',art:'τό',occ:68,   gl:'Sabbath',                              pos:'noun',    mo:'2nd decl., neut.',         ls:19, sem:['Sabbath','week','the seventh day of rest']},
+  {id:265,gk:'σάρξ',   art:'ἡ',  occ:147,  gl:'flesh',                                pos:'noun',    mo:'3rd decl., fem.',          ls:17, sem:['flesh','body','human nature','sinful nature','kinship','physical descent']},
+  {id:266,gk:'σημεῖον',art:'τό', occ:77,   gl:'sign, miracle',                        pos:'noun',    mo:'2nd decl., neut.',         ls:14, sem:['sign','miracle','portent','proof','attestation']},
+  {id:267,gk:'σοφία',  art:'ἡ',  occ:51,   gl:'wisdom',                               pos:'noun',    mo:'1st decl., fem.',          ls:24},
+  {id:268,gk:'σπείρω',            occ:52,   gl:'I sow',                                pos:'verb',    mo:'thematic (-ω)',             ls:22},
+  {id:269,gk:'στόμα',  art:'τό', occ:78,   gl:'mouth',                                pos:'noun',    mo:'3rd decl., neut.',         ls:17},
+  {id:270,gk:'σύ',                occ:1057, gl:'you (singular)',                        pos:'pronoun', mo:'2nd person pronoun',        ls:7},
+  {id:271,gk:'σύν',               occ:127,  gl:'with (+ dat.)',                         pos:'prep',    mo:'preposition',              ls:9},
+  {id:272,gk:'συνάγω',            occ:59,   gl:'I gather',                             pos:'verb',    mo:'thematic (-ω)',             ls:10},
+  {id:273,gk:'συναγωγή',art:'ἡ', occ:56,   gl:'synagogue, assembly',                  pos:'noun',    mo:'1st decl., fem.',          ls:19, sem:['synagogue','assembly','congregation','gathering place']},
+  {id:274,gk:'σῶμα',   art:'τό', occ:142,  gl:'body',                                 pos:'noun',    mo:'3rd decl., neut.',         ls:17, sem:['body','physical body','the body of Christ (church)','person']},
+  {id:275,gk:'σῴζω',              occ:106,  gl:'I save',                               pos:'verb',    mo:'thematic (-ω)',             ls:7,  sem:['save','rescue','preserve','heal','deliver from danger']},
+  {id:276,gk:'τέ',                occ:201,  gl:'and',                                  pos:'particle',mo:'enclitic connective particle',ls:11},
+  {id:277,gk:'τέκνον', art:'τό', occ:99,   gl:'child',                                pos:'noun',    mo:'2nd decl., neut.',         ls:4},
+  {id:278,gk:'τηρέω',             occ:70,   gl:'I keep, observe',                      pos:'verb',    mo:'contract (-εω)',            ls:22},
+  {id:279,gk:'τίς, τί',           occ:552,  gl:'who? what?',                           pos:'pronoun', mo:'interrogative pronoun',     ls:27},
+  {id:280,gk:'τίθημι',            occ:101,  gl:'I put, place',                         pos:'verb',    mo:'athematic (-μι)',           ls:29},
+  {id:281,gk:'τις, τι',           occ:518,  gl:'someone, anyone (indefinite)',          pos:'pronoun', mo:'indefinite pronoun/adj',    ls:27},
+  {id:282,gk:'τόπος',  art:'ὁ',  occ:95,   gl:'place',                                pos:'noun',    mo:'2nd decl., masc.',         ls:11},
+  {id:283,gk:'τότε',              occ:159,  gl:'then, at that time',                   pos:'adv',     mo:'adverb',                   ls:11},
+  {id:284,gk:'τοιοῦτος',          occ:56,   gl:'such as this, of such a kind',         pos:'adj',     mo:'demonstrative adj./pronoun',ls:32},
+  {id:285,gk:'τρεῖς',             occ:67,   gl:'three',                                pos:'numeral', mo:'numeral (3rd decl.)',        ls:30},
+  {id:286,gk:'τυφλός',            occ:50,   gl:'blind',                                pos:'adj',     mo:'adj., 2-1-2',              ls:20},
+  {id:287,gk:'ὕδωρ',   art:'τό', occ:76,   gl:'water',                                pos:'noun',    mo:'3rd decl., neut.',         ls:22},
+  {id:288,gk:'ὑμεῖς',             occ:1830, gl:'you (plural)',                          pos:'pronoun', mo:'2nd person pl. pronoun',    ls:7},
+  {id:289,gk:'ὑπάγω',             occ:79,   gl:'I depart, go away',                    pos:'verb',    mo:'thematic (-ω)',             ls:26},
+  {id:290,gk:'ὑπάρχω',            occ:60,   gl:'I exist, am',                          pos:'verb',    mo:'thematic (-ω)',             ls:18},
+  {id:291,gk:'ὑπέρ',              occ:149,  gl:'on behalf of (gen.); over, above (acc.)',pos:'prep',  mo:'preposition',              ls:10},
+  {id:292,gk:'ὑπό',               occ:217,  gl:'by (gen.); under, below (acc.)',       pos:'prep',    mo:'preposition',              ls:9},
+  {id:293,gk:'υἱός',   art:'ὁ',  occ:375,  gl:'son',                                  pos:'noun',    mo:'2nd decl., masc.',         ls:4,  sem:['son','descendant','Son of God','member of a group']},
+  {id:294,gk:'ὥρα',    art:'ἡ',  occ:106,  gl:'hour, time',                           pos:'noun',    mo:'1st decl., fem.',          ls:3},
+  {id:295,gk:'ὥστε',              occ:84,   gl:'so that, with the result that',        pos:'conj',    mo:'result conjunction',        ls:24},
+  {id:296,gk:'ὡς',                occ:505,  gl:'as, like; when; about',                pos:'conj',    mo:'conjunction/adverb',        ls:23},
+  {id:297,gk:'ὧδε',               occ:61,   gl:'here',                                 pos:'adv',     mo:'adverb',                   ls:26},
+  {id:298,gk:'ψυχή',   art:'ἡ',  occ:101,  gl:'soul, life, self',                     pos:'noun',    mo:'1st decl., fem.',          ls:7,  sem:['soul','life','self','person','mind','breath','inner being']},
+  {id:299,gk:'ζάω',               occ:140,  gl:'I live',                               pos:'verb',    mo:'contract (-αω)',            ls:21},
+  {id:300,gk:'ζητέω',             occ:117,  gl:'I seek',                               pos:'verb',    mo:'contract (-εω)',            ls:21},
+  {id:301,gk:'ζωή',    art:'ἡ',  occ:135,  gl:'life',                                 pos:'noun',    mo:'1st decl., fem.',          ls:3,  sem:['life','existence','eternal life','true/divine life']},
+];
+
+// ───────────────────────────────────────────────────────────────────────────
+// BOX DEFINITIONS — 11-box Leitner queue system (matches Mufradaati exactly)
+// ───────────────────────────────────────────────────────────────────────────
+const BOXES = [
+  {id:'l1q', label:'L1 Queue', color:'#B03030', isQueue:true,  main:1},
+  {id:'l1',  label:'Level 1',  color:'#B03030', isQueue:false, main:1},
+  {id:'l2a', label:'L2A',      color:'#B85C28', isQueue:false, main:2},
+  {id:'l2b', label:'L2B',      color:'#B85C28', isQueue:false, main:2},
+  {id:'l3q', label:'L3 Queue', color:'#9A7A1A', isQueue:true,  main:3},
+  {id:'l3',  label:'Level 3',  color:'#9A7A1A', isQueue:false, main:3},
+  {id:'l4q', label:'L4 Queue', color:'#2A5EA8', isQueue:true,  main:4},
+  {id:'l4',  label:'Level 4',  color:'#2A5EA8', isQueue:false, main:4},
+  {id:'l5a', label:'L5A',      color:'#6B3F9A', isQueue:false, main:5},
+  {id:'l5b', label:'L5B',      color:'#6B3F9A', isQueue:false, main:5},
+  {id:'mastered', label:'Mastered', color:'#2A7A4A', isQueue:false, main:6},
+];
+
+const DAY_NAMES = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+
+// Which boxes are reviewed on each day of the week
+const DAY_LEVELS = {
+  0: ['l5b','l4','l3','l2b','l1'],  // Sunday: full review
+  1: ['l2b','l1'],
+  2: ['l2b','l1'],
+  3: ['l3','l2b','l1'],             // Wednesday: add Level 3
+  4: ['l2b','l1'],
+  5: ['l2b','l1'],
+  6: ['l2b','l1'],
+};
+
+// Days when L3Q gets cleared into L3 (also the days L2B words route to l3q on correct)
+const L3Q_DAYS = [2, 6]; // Tuesday, Saturday
+
+// Given a box, which queue does a new word go to during a live session?
+const SESSION_QUEUE_FOR_BOX = {
+  l1:'l1q', l1q:'l1q',
+  l2a:'l2a', l2b:'l2a',
+  l3:'l3q',  l3q:'l3q',
+  l4:'l4q',  l4q:'l4q',
+  l5a:'l5a', l5b:'l5a',
+  mastered:'mastered',
+};
+
+// ───────────────────────────────────────────────────────────────────────────
+// NT BOOK READINESS DATA (total unique vocab per book)
+// The % of words you know from the top 301 list that appear in each book
+// is calculated dynamically; total counts are approximate scholarly figures
+// ───────────────────────────────────────────────────────────────────────────
+const BOOKS = [
+  {name:'John',          code:'Jn',   total:1011},
+  {name:'1 John',        code:'1Jn',  total:303},
+  {name:'Mark',          code:'Mk',   total:1270},
+  {name:'Luke',          code:'Lk',   total:2055},
+  {name:'Matthew',       code:'Mt',   total:1691},
+  {name:'Romans',        code:'Rom',  total:1066},
+  {name:'1 Corinthians', code:'1Co',  total:1054},
+  {name:'Galatians',     code:'Gal',  total:526},
+  {name:'Philippians',   code:'Php',  total:386},
+  {name:'Ephesians',     code:'Eph',  total:558},
+  {name:'Hebrews',       code:'Heb',  total:1038},
+  {name:'James',         code:'Jas',  total:567},
+  {name:'Revelation',    code:'Rev',  total:916},
+];
+
+// ───────────────────────────────────────────────────────────────────────────
+// STORAGE HELPERS
+// ───────────────────────────────────────────────────────────────────────────
+function ls(k, d) {
+  try { const v = localStorage.getItem(k); return v !== null ? JSON.parse(v) : d; }
+  catch { return d; }
+}
+function ss(k, v) {
+  try { localStorage.setItem(k, JSON.stringify(v)); } catch {}
+}
+
+function getBoxes()    { return ls('logos-boxes', {l1q:[],l1:[],l2a:[],l2b:[],l3q:[],l3:[],l4q:[],l4:[],l5a:[],l5b:[],mastered:[]}); }
+function saveBoxes(b)  { ss('logos-boxes', b); }
+function getSession()  { return ls('logos-session', null); }
+function saveSession(s){ ss('logos-session', s); }
+function getStats()    { return ls('logos-stats', {lifetime:{reviewed:0,correct:0,byLevel:{}},sessions:[]}); }
+function saveStats(s)  { ss('logos-stats', s); }
+function getSettings() { return ls('logos-settings', {pin:''}); }
+function saveSettings(s){ ss('logos-settings', s); }
+function getWords()    { return ls('logos-words',    []); }   // array of study word objects
+function saveWords(w)  { ss('logos-words', w); }
+
+// ───────────────────────────────────────────────────────────────────────────
+// HELPERS
+// ───────────────────────────────────────────────────────────────────────────
+function uid()   { return 'w' + Date.now() + Math.random().toString(36).slice(2, 6); }
+function today() { return new Date().toDateString(); }
+function lexById(id) { return LEXICON.find(w => w.id === id); }
+
+function posBadgeClass(pos) {
+  if (pos === 'noun') return 'badge-noun';
+  if (pos === 'verb') return 'badge-verb';
+  if (pos === 'adj')  return 'badge-adj';
+  return 'badge-other';
+}
+
+function showToast(msg, dur = 2200) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), dur);
+}
+
+function sHead(title) {
+  return `<div class="s-head">${title}<div class="s-head-line"></div></div>`;
+}
+
+// ───────────────────────────────────────────────────────────────────────────
+// TAB NAVIGATION
+// ───────────────────────────────────────────────────────────────────────────
+const TAB_IDS = ['study', 'lexicon', 'add', 'parse', 'stats'];
+
+function setTab(name) {
+  TAB_IDS.forEach(id => {
+    document.getElementById('tab-' + id).classList.toggle('active', id === name);
+    document.getElementById('nb-' + id).classList.toggle('active', id === name);
+  });
+  if (name === 'study')   renderStudy();
+  if (name === 'lexicon') renderLexicon();
+  if (name === 'add')     renderAdd();
+  if (name === 'parse')   renderParse();
+  if (name === 'stats')   renderStats();
+}
+
+// ───────────────────────────────────────────────────────────────────────────
+// SETTINGS MODAL
+// ───────────────────────────────────────────────────────────────────────────
+// ── API key helpers ────────────────────────────────────────────────────────────
+// ── Hardcoded worker URL — set this at deployment ─────────────────────────
+const WORKER_URL = 'https://logos-worker.justin-andre00.workers.dev';
+
+function getApiKey()   { return localStorage.getItem('logos-apikey') || ''; }
+function saveApiKey(k) { localStorage.setItem('logos-apikey', k); }
+function apiUrl()      { return WORKER_URL; }
+function apiHeaders()  {
+  return {
+    'Content-Type': 'application/json',
+    'X-Api-Key':    getApiKey(),
+    'anthropic-version': '2023-06-01',
+  };
+}
+function requireApi() {
+  if (!getApiKey()) {
+    document.getElementById('add-content').innerHTML = `
+      <div class="api-missing">
+        <strong>API key not set.</strong> Open <a href="#" onclick="openSettings();return false;" style="color:var(--goldD);">Settings ⚙</a>
+        and enter your Anthropic API key to use AI features.
+      </div>`;
+    return false;
+  }
+  return true;
+}
+
+function openSettings() {
+  document.getElementById('set-apikey').value = getApiKey();
+  document.getElementById('set-pin').value    = getSettings().pin || '';
+  document.getElementById('modal-settings').classList.remove('hidden');
+}
+function closeSettings() {
+  document.getElementById('modal-settings').classList.add('hidden');
+}
+function saveSettings() {
+  const key = document.getElementById('set-apikey').value.trim();
+  if (key) saveApiKey(key);
+  const cfg = { pin: document.getElementById('set-pin').value.trim() };
+  ss('logos-settings', cfg);
+  closeSettings();
+  showToast('Settings saved');
+}
+
+// ───────────────────────────────────────────────────────────────────────────
+// STUDY TAB — Leitner queue box system (matches Mufradaati exactly)
+// ───────────────────────────────────────────────────────────────────────────
+
+// ── Box helpers ──────────────────────────────────────────────────────────────
+function boxDef(id) {
+  return BOXES.find(b => b.id === id) || {id, label:id, color:'var(--pap-muted)', isQueue:false, main:1};
+}
+function moveWords(ids, fromBox, toBox) {
+  const boxes = getBoxes();
+  boxes[fromBox] = (boxes[fromBox]||[]).filter(u => !ids.includes(u));
+  boxes[toBox]   = [...(boxes[toBox]||[]), ...ids];
+  saveBoxes(boxes);
+}
+function shuffle(arr) {
+  const a = [...arr];
+  for (let i = a.length-1; i > 0; i--) {
+    const j = Math.floor(Math.random()*(i+1));
+    [a[i],a[j]] = [a[j],a[i]];
+  }
+  return a;
+}
+
+// ── Routing ───────────────────────────────────────────────────────────────────
+function correctDest(box, dow) {
+  if (box==='l5b') return 'mastered';
+  if (box==='l4')  return 'l5a';
+  if (box==='l3')  return 'l4';
+  if (box==='l2b') return L3Q_DAYS.includes(dow) ? 'l3q' : 'l3';
+  if (box==='l1')  return 'l2a';
+  return 'l1';
+}
+function incorrectDest(box) {
+  if (box==='l5b') return 'l4q';
+  if (box==='l4')  return 'l3q';
+  if (box==='l3')  return 'l2a';
+  if (box==='l2b') return 'l1q';
+  if (box==='l1')  return 'l1q';
+  return 'l1q';
+}
+
+// ── Session state ─────────────────────────────────────────────────────────────
+function sessionDoneToday() {
+  const stats = getStats();
+  const today = new Date().toDateString();
+  return stats.sessions.some(s => new Date(s.ts).toDateString() === today);
+}
+
+function runMidnightClear() {
+  const today = new Date().toDateString();
+  if (localStorage.getItem('logos-last-clear') === today) return;
+  localStorage.setItem('logos-last-clear', today);
+  const boxes = getBoxes();
+  const dow   = new Date().getDay();
+  if ((boxes.l1q||[]).length > 0) moveWords([...boxes.l1q], 'l1q', 'l1');
+  if ((boxes.l4q||[]).length > 0) moveWords([...boxes.l4q], 'l4q', 'l4');
+  if (L3Q_DAYS.includes(dow) && (boxes.l3q||[]).length > 0) moveWords([...boxes.l3q], 'l3q', 'l3');
+}
+
+function buildTodaySteps() {
+  return DAY_LEVELS[new Date().getDay()] || ['l2b','l1'];
+}
+
+// ── renderStudy (home view) ───────────────────────────────────────────────────
+function renderStudy() {
+  runMidnightClear();
+  const boxes  = getBoxes();
+  const sess   = getSession();
+  const dow    = new Date().getDay();
+  const todayLevels = buildTodaySteps();
+  const todayWords  = todayLevels.reduce((n,id) => n + (boxes[id]||[]).length, 0);
+  const total    = Object.values(boxes).flat().length;
+  const mastered = (boxes.mastered||[]).length;
+
+  // Today banner
+  const banner = document.getElementById('study-today-banner');
+  banner.style.display = 'flex';
+  banner.innerHTML =
+    `<span class="today-day">Today · ${DAY_NAMES[dow]}</span>` +
+    `<span class="today-plan">${todayLevels.map(id=>boxDef(id).label).join(' · ')} · ${todayWords} word${todayWords!==1?'s':''}</span>`;
+
+  // Box grid — show only non-queue boxes (queues shown as sub-counts)
+  let gridHtml = '';
+  BOXES.filter(b => !b.isQueue).forEach(b => {
+    const count = (boxes[b.id]||[]).length;
+    const queueId  = b.id==='l1'?'l1q':b.id==='l3'?'l3q':b.id==='l4'?'l4q':null;
+    const queueCnt = queueId ? (boxes[queueId]||[]).length : 0;
+    const queueTag = queueCnt > 0 ? `<span style="font-size:9px;opacity:.55;margin-left:3px;">(+${queueCnt})</span>` : '';
+    const isDue = todayLevels.includes(b.id);
+    gridHtml += `
+      <div class="box-card${isDue?' box-card-due':''}" style="border-top:3px solid ${b.color};${b.id==='mastered'?'cursor:default;':''}"
+           onclick="${b.id!=='mastered'?`startSessionFor('${b.id}')`:''}" >
+        <div class="box-label" style="color:${b.color};">${b.label}${isDue?'<span class="due-dot" style="background:'+b.color+';"></span>':''}</div>
+        <div class="box-count" style="color:${b.color};">${count}${queueTag}</div>
+        <div class="box-sub">${isDue?'Today':'–'}</div>
+      </div>`;
+  });
+  document.getElementById('study-box-grid').innerHTML = gridHtml;
+
+  // Badge
+  document.getElementById('study-due-badge').innerHTML = total > 0
+    ? `<span class="badge badge-gold">${mastered}/${total} mastered</span>` : '';
+
+  // Session area
+  const sessEl = document.getElementById('study-session-area');
+  if (sess && sess.active) { renderSessionCard(); return; }
+
+  if (total === 0) {
+    sessEl.innerHTML = `
+      <div class="empty-state">
+        <div class="empty-gk">ἀρχή</div>
+        <div class="empty-title">No Words Yet</div>
+        <div class="empty-sub">Head to the <strong>Lexicon</strong> to browse 301 NT words and add some to start studying.</div>
+      </div>`;
+  } else if (sessionDoneToday()) {
+    const tmrLevels = (DAY_LEVELS[(dow+1)%7]||[]).map(id=>boxDef(id).label).join(' · ');
+    sessEl.innerHTML = `
+      <div class="session-done-msg">
+        <div class="session-done-check">✓</div>
+        <div class="session-done-title">Session Complete for Today</div>
+        <div class="session-done-sub">Tomorrow: ${tmrLevels}</div>
+        <button class="btn2" onclick="openSessionModal()" style="margin-top:16px;">Review Again</button>
+      </div>`;
+  } else if (todayWords === 0) {
+    sessEl.innerHTML = `
+      <div class="empty-state">
+        <div class="empty-gk">✓</div>
+        <div class="empty-title">All Caught Up</div>
+        <div class="empty-sub">No words are scheduled for today. Add more from the Lexicon, or review a box below.</div>
+        <button class="btn3" onclick="openSessionModal()" style="margin-top:16px;">Study Anyway</button>
+      </div>`;
+  } else {
+    sessEl.innerHTML = `
+      <div class="review-due-btn">
+        <button class="btn1" onclick="openSessionModal()">▶ Start Session · ${todayWords} Word${todayWords!==1?'s':''}</button>
+        <div style="font-size:11px;color:var(--pap-muted);margin-top:10px;font-style:italic;">Or tap a box above to study that level</div>
+      </div>`;
+  }
+}
+
+// ── Session modal ─────────────────────────────────────────────────────────────
+function openSessionModal(preselectedBox) {
+  const dow = new Date().getDay();
+  const todayLevels = buildTodaySteps();
+  const boxes = getBoxes();
+  const reviewable = BOXES.filter(b => !b.isQueue && b.id !== 'mastered');
+
+  const toggleHtml = reviewable.map(b => {
+    const count   = (boxes[b.id]||[]).length;
+    const checked = preselectedBox ? b.id === preselectedBox : todayLevels.includes(b.id);
+    return `<label class="sess-toggle${checked?' active':''}" id="st-${b.id}" style="border-color:${checked?b.color:''};">
+      <input type="checkbox" id="stc-${b.id}" ${checked?'checked':''} style="display:none"
+        onchange="document.getElementById('st-${b.id}').classList.toggle('active',this.checked);document.getElementById('st-${b.id}').style.borderColor=this.checked?'${b.color}':''"/>
+      <span style="color:${checked?b.color:''}">${b.label}</span>
+      <span style="opacity:.45;font-size:10px;margin-left:3px;">${count}</span>
+    </label>`;
+  }).join('');
+
+  document.getElementById('modal-root').innerHTML = `
+    <div class="modal-overlay" onclick="if(event.target===this)closeModal()">
+      <div class="modal">
+        <div class="modal-title">▶ Start Session</div>
+        <div class="modal-sub">Today is ${DAY_NAMES[dow]} · select levels to review</div>
+        <div style="margin-bottom:20px;">
+          <div style="font-family:'Cinzel',serif;font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:var(--pap-muted);margin-bottom:10px;">Levels</div>
+          <div class="sess-toggles">${toggleHtml}</div>
+        </div>
+        <div style="margin-bottom:24px;">
+          <div style="font-family:'Cinzel',serif;font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:var(--pap-muted);margin-bottom:10px;">Card Direction</div>
+          <div class="sess-toggles">
+            <label class="sess-toggle active" id="dir-gken" style="border-color:var(--goldD);">
+              <input type="radio" name="sess-dir" value="gk-en" checked style="display:none"
+                onchange="document.getElementById('dir-gken').classList.add('active');document.getElementById('dir-engk').classList.remove('active');document.getElementById('dir-gken').style.borderColor='var(--goldD)';document.getElementById('dir-engk').style.borderColor=''"/>
+              <span style="color:var(--goldD);">Greek → English</span>
+            </label>
+            <label class="sess-toggle" id="dir-engk">
+              <input type="radio" name="sess-dir" value="en-gk" style="display:none"
+                onchange="document.getElementById('dir-engk').classList.add('active');document.getElementById('dir-gken').classList.remove('active');document.getElementById('dir-engk').style.borderColor='var(--goldD)';document.getElementById('dir-gken').style.borderColor=''"/>
+              English → Greek
+            </label>
+          </div>
+        </div>
+        <div style="display:flex;gap:10px;">
+          <button class="btn1" onclick="startSession()">▶ Begin</button>
+          <button class="btn3" onclick="closeModal()">Cancel</button>
+        </div>
+      </div>
+    </div>`;
+}
+
+function closeModal() {
+  document.getElementById('modal-root').innerHTML = '';
+}
+
+function startSessionFor(boxId) {
+  openSessionModal(boxId);
+}
+
+function startSession() {
+  const reviewable = BOXES.filter(b => !b.isQueue && b.id !== 'mastered');
+  const selected   = reviewable.filter(b => document.getElementById('stc-'+b.id)?.checked).map(b => b.id);
+  const dirEl      = document.querySelector('input[name="sess-dir"]:checked');
+  const direction  = dirEl ? dirEl.value : 'gk-en';
+  closeModal();
+
+  const boxes   = getBoxes();
+  const levels  = selected.filter(id => (boxes[id]||[]).length > 0);
+  if (!levels.length) { showToast('No words in selected levels'); return; }
+
+  const dow   = new Date().getDay();
+  const steps = levels.map(id => ({ box: id }));
+  const firstBox = steps[0].box;
+  const sess = {
+    active:         true,
+    dow,
+    direction,
+    steps,
+    stepIdx:        0,
+    queue:          shuffle([...(boxes[firstBox]||[])]),
+    queueIdx:       0,
+    flipped:        false,
+    pendingPrompt:  null,
+    sessionTotal:   0,
+    sessionCorrect: 0,
+    byLevel:        {},
+    moveLog:        [],
+    startedAt:      Date.now(),
+  };
+  saveSession(sess);
+  renderSessionCard();
+}
+
+// ── Session card ──────────────────────────────────────────────────────────────
+function renderSessionCard() {
+  const sess = getSession();
+  if (!sess || !sess.active) { renderStudy(); return; }
+  if (sess.pendingPrompt)    { renderPrompt(sess); return; }
+
+  const { steps, stepIdx, queue, queueIdx, flipped, direction } = sess;
+  const step = steps[stepIdx];
+  if (!step) { endSession(sess); return; }
+
+  const wordId  = queue[queueIdx];
+  if (wordId == null) { finishStep(sess); return; }
+
+  // Look up word
+  const wordObj = getWords().find(w => w.id === wordId);
+  if (!wordObj) { skipWord(sess); return; }
+
+  const w   = wordObj; // word object has gk, gl, pos, mo, sem, art from addLexWord
+  const pct = Math.round((queueIdx / queue.length) * 100);
+  const stepLabel = boxDef(step.box).label;
+  const isGkEn   = direction !== 'en-gk';
+
+  const artHtml = w.art ? `<div class="session-word-art">· ${w.art} ·</div>` : '';
+  const semHtml = w.sem && w.sem.length
+    ? `<div class="sem-pills" style="justify-content:center;margin-top:8px;">${w.sem.map(s=>`<span class="sem-pill">${s}</span>`).join('')}</div>` : '';
+
+  // Front face
+  const frontHtml = isGkEn
+    ? `<div class="session-word-gk">${w.gk}</div>${artHtml}<div class="session-tap-hint">tap to reveal</div>`
+    : `<div class="session-word-en-front">${w.gl}</div><div class="session-tap-hint">tap to reveal</div>`;
+
+  // Back face — Greek always shown prominently regardless of direction
+  const backHtml = `
+    <div class="session-back-gk">${w.gk}</div>
+    ${artHtml}
+    <div class="session-back-def">${w.gl}</div>
+    <div style="display:flex;justify-content:center;margin-bottom:4px;">
+      <span class="badge ${posBadgeClass(w.pos)}">${posLabel(w.pos)}</span>
+    </div>
+    <div class="session-back-mo">${w.mo}</div>
+    ${semHtml}
+    <div class="session-back-box">Currently in ${stepLabel}</div>`;
+
+  document.getElementById('study-session-area').innerHTML = `
+    <div class="session-header">
+      <span class="session-prog-text">${queueIdx+1}/${queue.length} · ${stepLabel} · step ${stepIdx+1}/${steps.length}</span>
+      <button class="btn3" onclick="confirmEndSession()" style="font-size:11px;padding:5px 12px;">End</button>
+    </div>
+    <div class="prog-bar" style="margin-bottom:18px;">
+      <div class="prog-fill" style="width:${pct}%;"></div>
+    </div>
+    <div class="flip-wrap" id="study-flip-wrap" onclick="flipCard()">
+      <div class="flip-inner${flipped?' flipped':''}" id="flip-inner">
+        <div class="flip-face">${frontHtml}</div>
+        <div class="flip-face flip-back">${backHtml}</div>
+      </div>
+    </div>
+    <div class="session-hint-bar" id="session-hint" style="${flipped?'display:none;':''}">
+      <span class="session-hint-txt">↑ tap card to reveal</span>
+    </div>
+    <div class="rating-grid" id="session-ratings" style="${flipped?'':'display:none;'}">
+      <button class="rate-btn" onclick="rateWord('correct')"
+        style="color:var(--lm);border-color:var(--lm);background:rgba(42,122,74,0.07);">
+        <div style="font-size:22px;margin-bottom:3px;">✓</div>Got it · J
+      </button>
+      <button class="rate-btn" onclick="rateWord('incorrect')"
+        style="color:var(--l1);border-color:var(--l1);background:rgba(176,48,48,0.07);">
+        <div style="font-size:22px;margin-bottom:3px;">✗</div>Missed · K
+      </button>
+    </div>
+    ${sess.moveLog?.length && sess.queueIdx > 0 ? `
+    <div style="text-align:center;margin-top:10px;">
+      <button onclick="undoLastCard()" style="background:none;border:none;cursor:pointer;
+        font-family:'Cinzel',serif;font-size:10px;letter-spacing:.08em;color:var(--pap-muted2);
+        text-decoration:underline;text-underline-offset:3px;padding:4px 8px;">
+        ↩ Undo last card
+      </button>
+    </div>` : ''}`;
+}
+
+function flipCard() {
+  const sess = getSession();
+  if (!sess || sess.flipped) return;
+  sess.flipped = true;
+  saveSession(sess);
+  document.getElementById('flip-inner')?.classList.add('flipped');
+  const hint    = document.getElementById('session-hint');
+  const ratings = document.getElementById('session-ratings');
+  if (hint)    hint.style.display    = 'none';
+  if (ratings) ratings.style.display = 'grid';
+}
+
+function skipWord(sess) {
+  sess.queueIdx++;
+  sess.flipped = false;
+  saveSession(sess);
+  if (sess.queueIdx >= sess.queue.length) finishStep(sess);
+  else renderSessionCard();
+}
+
+function rateWord(rating) {
+  const sess = getSession();
+  if (!sess) return;
+  const step   = sess.steps[sess.stepIdx];
+  const wordId = sess.queue[sess.queueIdx];
+  const dow    = sess.dow;
+
+  const dest = rating==='correct' ? correctDest(step.box, dow) : incorrectDest(step.box);
+
+  // Move word
+  const boxes = getBoxes();
+  Object.keys(boxes).forEach(bid => { boxes[bid] = (boxes[bid]||[]).filter(u => u !== wordId); });
+  boxes[dest] = boxes[dest] || [];
+  boxes[dest].push(wordId);
+  saveBoxes(boxes);
+
+  // Track stats
+  if (!sess.byLevel[step.box]) sess.byLevel[step.box] = {correct:0,total:0};
+  sess.byLevel[step.box].total++;
+  if (rating==='correct') sess.byLevel[step.box].correct++;
+  sess.sessionTotal++;
+  if (rating==='correct') sess.sessionCorrect++;
+  sess.moveLog.push({wordId, from:step.box, to:dest, rating, ts:Date.now()});
+
+  // Advance
+  sess.queueIdx++;
+  sess.flipped = false;
+  saveSession(sess);
+
+  if (sess.queueIdx >= sess.queue.length) finishStep(sess);
+  else renderSessionCard();
+}
+
+function undoLastCard() {
+  const sess = getSession();
+  if (!sess || !sess.active || !sess.moveLog?.length || sess.queueIdx < 1) return;
+
+  const last = sess.moveLog.pop();
+
+  // Move word back to where it came from
+  const boxes = getBoxes();
+  boxes[last.to]   = (boxes[last.to]   || []).filter(u => u !== last.wordId);
+  if (!boxes[last.from]) boxes[last.from] = [];
+  boxes[last.from].push(last.wordId);
+  saveBoxes(boxes);
+
+  // Rewind session counters
+  sess.sessionTotal = Math.max(0, sess.sessionTotal - 1);
+  if (last.rating === 'correct') sess.sessionCorrect = Math.max(0, sess.sessionCorrect - 1);
+  if (sess.byLevel[last.from]) {
+    sess.byLevel[last.from].total = Math.max(0, sess.byLevel[last.from].total - 1);
+    if (last.rating === 'correct') sess.byLevel[last.from].correct = Math.max(0, sess.byLevel[last.from].correct - 1);
+  }
+
+  // Rewind card position
+  sess.queueIdx--;
+  sess.flipped = false;
+  saveSession(sess);
+  renderSessionCard();
+}
+
+// ── Step completion logic ─────────────────────────────────────────────────────
+function finishStep(sess) {
+  if (!sess) sess = getSession(); if (!sess) return;
+  const box = sess.steps[sess.stepIdx].box;
+
+  if (box==='l5b') {
+    const f = getBoxes();
+    if ((f.l5a||[]).length > 0) {
+      sess.pendingPrompt = {type:'move',from:'l5a',to:'l5b',
+        msg:'Move L5A → L5B?',
+        sub:'Words in L5A have waited their time and are ready to become L5B candidates.'};
+      saveSession(sess); renderPrompt(sess); return;
+    }
+  }
+  if (box==='l4') {
+    const f = getBoxes();
+    if ((f.l4q||[]).length > 0) { moveWords([...f.l4q],'l4q','l4'); showToast('L4 Queue → L4 ✓'); }
+  }
+  if (box==='l3') {
+    const f = getBoxes();
+    if ((f.l3q||[]).length > 0) { moveWords([...f.l3q],'l3q','l3'); showToast('L3 Queue → L3 ✓'); }
+  }
+  if (box==='l2b') {
+    const f = getBoxes();
+    if ((f.l2a||[]).length > 0) {
+      sess.pendingPrompt = {type:'move',from:'l2a',to:'l2b',
+        msg:'Move L2A → L2B?',
+        sub:'These words have been in L2A and are ready for tomorrow\'s L2B review.'};
+      saveSession(sess); renderPrompt(sess); return;
+    }
+  }
+  if (box==='l1') {
+    const f = getBoxes();
+    if ((f.l1q||[]).length > 0) moveWords([...f.l1q],'l1q','l1');
+    endSession(sess); return;
+  }
+  advanceStep(sess);
+}
+
+function advanceStep(sess) {
+  sess.stepIdx++;
+  if (sess.stepIdx >= sess.steps.length) { endSession(sess); return; }
+  const nextBox = sess.steps[sess.stepIdx].box;
+  sess.queue    = shuffle([...(getBoxes()[nextBox]||[])]);
+  sess.queueIdx = 0;
+  sess.flipped  = false;
+  saveSession(sess);
+  renderSessionCard();
+}
+
+// ── Promotion prompts ─────────────────────────────────────────────────────────
+function renderPrompt(sess) {
+  const p   = sess.pendingPrompt;
+  const fd  = boxDef(p.from);
+  const td  = boxDef(p.to);
+  const cnt = (getBoxes()[p.from]||[]).length;
+  document.getElementById('study-session-area').innerHTML = `
+    <div style="min-height:280px;display:flex;flex-direction:column;justify-content:center;text-align:center;padding:20px;">
+      <div style="font-size:34px;margin-bottom:14px;">🔄</div>
+      <div style="font-family:'Cinzel',serif;font-size:16px;font-weight:700;color:var(--goldD);margin-bottom:10px;">${p.msg}</div>
+      <div style="font-size:12px;color:var(--pap-muted);margin-bottom:18px;line-height:1.7;">${p.sub}</div>
+      <div style="font-size:14px;margin-bottom:22px;">
+        <span style="color:${fd.color};">${fd.label}</span>
+        <span style="color:var(--pap-muted);margin:0 10px;">→</span>
+        <span style="color:${td.color};">${td.label}</span>
+        <span style="color:var(--pap-muted);margin-left:8px;">(${cnt} word${cnt!==1?'s':''})</span>
+      </div>
+      <div style="display:flex;gap:10px;justify-content:center;">
+        <button class="btn1" onclick="confirmPrompt(true)">Yes, move them</button>
+        <button class="btn3" onclick="confirmPrompt(false)">Skip for now</button>
+      </div>
+    </div>`;
+}
+
+function confirmPrompt(yes) {
+  const sess = getSession(); if (!sess) return;
+  const p    = sess.pendingPrompt;
+  if (yes) {
+    const boxes = getBoxes();
+    moveWords([...(boxes[p.from]||[])], p.from, p.to);
+    showToast(`${boxDef(p.from).label} → ${boxDef(p.to).label} ✓`);
+  }
+  sess.pendingPrompt = null;
+  saveSession(sess);
+  advanceStep(sess);
+}
+
+// ── End session ───────────────────────────────────────────────────────────────
+function endSession(sess) {
+  const stats = getStats();
+  stats.lifetime.reviewed = (stats.lifetime.reviewed||0) + sess.sessionTotal;
+  stats.lifetime.correct  = (stats.lifetime.correct||0)  + sess.sessionCorrect;
+  Object.keys(sess.byLevel||{}).forEach(box => {
+    if (!stats.lifetime.byLevel[box]) stats.lifetime.byLevel[box] = {correct:0,total:0};
+    stats.lifetime.byLevel[box].correct += sess.byLevel[box].correct;
+    stats.lifetime.byLevel[box].total   += sess.byLevel[box].total;
+  });
+  stats.sessions.push({ts:Date.now(),dow:sess.dow,correct:sess.sessionCorrect,total:sess.sessionTotal,byLevel:sess.byLevel,moveLog:sess.moveLog});
+  if (stats.sessions.length > 300) stats.sessions = stats.sessions.slice(-300);
+  saveStats(stats);
+  saveSession({...sess, active:false, endedAt:Date.now()});
+  renderSessionEnd();
+}
+
+function renderSessionEnd() {
+  const sess = getSession();
+  if (!sess) { renderStudy(); return; }
+  const pct = sess.sessionTotal > 0 ? Math.round(sess.sessionCorrect/sess.sessionTotal*100) : 0;
+
+  const byLvlRows = Object.keys(sess.byLevel||{}).map(box => {
+    const d   = sess.byLevel[box];
+    const def = boxDef(box);
+    const a   = d.total > 0 ? Math.round(d.correct/d.total*100) : 0;
+    return `<div style="display:flex;align-items:center;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border);">
+      <span style="color:${def.color};font-size:13px;">${def.label}</span>
+      <span style="font-size:12px;color:var(--pap-muted);">${d.correct}/${d.total}
+        <span style="color:var(--pap-ink);margin-left:6px;">${a}%</span></span>
+    </div>`;
+  }).join('');
+
+  document.getElementById('study-session-area').innerHTML = `
+    <div class="session-end">
+      <div class="session-end-gk">τετέλεσται</div>
+      <div class="session-end-title">Session Complete</div>
+      <div class="session-end-sub">${DAY_NAMES[sess.dow]} · ${pct}% accuracy</div>
+      <div class="session-end-grid">
+        <div class="session-stat-box" style="border-color:rgba(160,120,24,0.2);">
+          <div class="session-stat-num" style="color:var(--goldD);">${sess.sessionTotal}</div>
+          <div class="session-stat-lbl">Reviewed</div>
+        </div>
+        <div class="session-stat-box" style="border-color:rgba(42,122,74,0.2);">
+          <div class="session-stat-num" style="color:var(--lm);">${sess.sessionCorrect}</div>
+          <div class="session-stat-lbl">Got It</div>
+        </div>
+        <div class="session-stat-box" style="border-color:rgba(176,48,48,0.2);">
+          <div class="session-stat-num" style="color:var(--l1);">${sess.sessionTotal-sess.sessionCorrect}</div>
+          <div class="session-stat-lbl">Missed</div>
+        </div>
+      </div>
+      ${byLvlRows?`<div style="margin-bottom:18px;border:1px solid var(--border);border-radius:10px;padding:6px 14px;background:var(--card);">${byLvlRows}</div>`:''}
+      <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap;">
+        <button class="btn1" onclick="saveSession(null);renderStudy()">← Back</button>
+        <button class="btn2" onclick="setTab('lexicon')">Browse Lexicon</button>
+      </div>
+    </div>`;
+
+  // Refresh box grid only (session area already updated above)
+  const boxes = getBoxes();
+  const dow   = new Date().getDay();
+  const todayLevels = buildTodaySteps();
+  let gridHtml = '';
+  BOXES.filter(b => !b.isQueue).forEach(b => {
+    const count    = (boxes[b.id]||[]).length;
+    const queueId  = b.id==='l1'?'l1q':b.id==='l3'?'l3q':b.id==='l4'?'l4q':null;
+    const queueCnt = queueId?(boxes[queueId]||[]).length:0;
+    const queueTag = queueCnt>0?`<span style="font-size:9px;opacity:.55;margin-left:3px;">(+${queueCnt})</span>`:'';
+    const isDue    = todayLevels.includes(b.id);
+    gridHtml += `
+      <div class="box-card${isDue?' box-card-due':''}" style="border-top:3px solid ${b.color};${b.id==='mastered'?'cursor:default;':''}"
+           onclick="${b.id!=='mastered'?`startSessionFor('${b.id}')`:''}">
+        <div class="box-label" style="color:${b.color};">${b.label}</div>
+        <div class="box-count" style="color:${b.color};">${count}${queueTag}</div>
+        <div class="box-sub">${isDue?'Today':'–'}</div>
+      </div>`;
+  });
+  document.getElementById('study-box-grid').innerHTML = gridHtml;
+  const total    = Object.values(boxes).flat().length;
+  const mastered = (boxes.mastered||[]).length;
+  document.getElementById('study-due-badge').innerHTML = total>0
+    ? `<span class="badge badge-gold">${mastered}/${total} mastered</span>` : '';
+}
+
+function confirmEndSession() {
+  if (confirm('End this session? Progress so far will be saved.')) {
+    const sess = getSession();
+    if (sess && sess.sessionTotal > 0) endSession(sess);
+    else { saveSession({...(sess||{}), active:false}); renderStudy(); }
+  }
+}
+
+// ───────────────────────────────────────────────────────────────────────────
+// ADD TAB
+// ───────────────────────────────────────────────────────────────────────────
+let _addMode = 'manual';
+
+// POS options for dropdowns
+const POS_OPTIONS = [
+  {v:'noun',    l:'Noun'},
+  {v:'verb',    l:'Verb'},
+  {v:'adj',     l:'Adjective'},
+  {v:'particle',l:'Particle'},
+  {v:'prep',    l:'Preposition'},
+  {v:'conj',    l:'Conjunction'},
+  {v:'adv',     l:'Adverb'},
+  {v:'pronoun', l:'Pronoun'},
+  {v:'numeral', l:'Numeral'},
+  {v:'article', l:'Article'},
+  {v:'other',   l:'Other'},
+];
+
+// Target box options (non-queue, non-mastered)
+function boxOptions(selectedId) {
+  return BOXES.filter(b => !b.isQueue && b.id !== 'mastered')
+    .map(b => `<option value="${b.id}"${b.id===(selectedId||'l1')?' selected':''}>${b.label}</option>`)
+    .join('');
+}
+
+function setAddMode(mode) {
+  _addMode = mode;
+  document.querySelectorAll('.add-mode-btn').forEach(el => el.classList.remove('active'));
+  document.getElementById('add-mode-'+mode)?.classList.add('active');
+  renderAdd();
+}
+
+function renderAdd() {
+  if (_addMode === 'manual') renderManualAdd();
+  else if (_addMode === 'quick')  renderQuickAdd();
+  else if (_addMode === 'bulk')   renderBulkAdd();
+  else if (_addMode === 'verse')  renderVerseLookup();
+}
+
+// ── Save custom word to box ───────────────────────────────────────────────────
+function saveCustomWord(fields, targetBox) {
+  // fields: {gk, art, gl, pos, mo, ls, sem}
+  if (!fields.gk || !fields.gl) { showToast('Greek word and gloss are required', 2600); return false; }
+  const semArr = fields.sem
+    ? fields.sem.split(',').map(s=>s.trim()).filter(Boolean)
+    : [];
+  const wordObj = {
+    id:    uid(),
+    lexId: null,
+    gk:    fields.gk.trim(),
+    art:   fields.art?.trim() || null,
+    gl:    fields.gl.trim(),
+    pos:   fields.pos || 'noun',
+    mo:    fields.mo?.trim() || '',
+    ls:    parseInt(fields.ls) || 0,
+    sem:   semArr.length ? semArr : null,
+    added: Date.now(),
+    lastReviewed: null,
+    isCustom: true,
+  };
+  const words = getWords(); words.push(wordObj); saveWords(words);
+  const boxes = getBoxes();
+  if (!boxes[targetBox]) boxes[targetBox] = [];
+  boxes[targetBox].push(wordObj.id); saveBoxes(boxes);
+  return wordObj;
+}
+
+// ── MANUAL ADD ────────────────────────────────────────────────────────────────
+function renderManualAdd() {
+  const posOpts = POS_OPTIONS.map(p=>`<option value="${p.v}">${p.l}</option>`).join('');
+  document.getElementById('add-content').innerHTML = `
+    <div class="add-form">
+      <div class="field">
+        <label class="lbl">Greek Word (lemma) *</label>
+        <input class="inp inp-gk" id="man-gk" placeholder="e.g. λόγος" autocomplete="off"/>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+        <div class="field">
+          <label class="lbl">Article (nouns)</label>
+          <select class="inp" id="man-art" style="font-size:15px;padding:9px 12px;cursor:pointer;">
+            <option value="">— none —</option>
+            <option value="ὁ">ὁ (masc.)</option>
+            <option value="ἡ">ἡ (fem.)</option>
+            <option value="τό">τό (neut.)</option>
+          </select>
+        </div>
+        <div class="field">
+          <label class="lbl">Part of Speech *</label>
+          <select class="inp" id="man-pos" style="font-size:13px;padding:9px 12px;cursor:pointer;">${posOpts}</select>
+        </div>
+      </div>
+      <div class="field">
+        <label class="lbl">Gloss / Definition *</label>
+        <input class="inp" id="man-gl" placeholder="e.g. word, message, reason" autocomplete="off"/>
+      </div>
+      <div class="field">
+        <label class="lbl">Morphology</label>
+        <input class="inp" id="man-mo" placeholder="e.g. 2nd decl., masc.; pp. 3, 56" autocomplete="off"/>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+        <div class="field">
+          <label class="lbl">Semantic Range</label>
+          <input class="inp" id="man-sem" placeholder="comma-separated tags" autocomplete="off"/>
+        </div>
+        <div class="field">
+          <label class="lbl">Croy Lesson #</label>
+          <input class="inp" id="man-ls" type="number" min="1" max="40" placeholder="e.g. 3" style="padding:9px 12px;"/>
+        </div>
+      </div>
+      <div class="field">
+        <label class="lbl">Save to Box</label>
+        <select class="inp" id="man-box" style="font-size:13px;padding:9px 12px;cursor:pointer;">${boxOptions('l1')}</select>
+      </div>
+      <div style="display:flex;gap:10px;margin-top:6px;flex-wrap:wrap;">
+        <button class="btn1" onclick="submitManual(false)">Save Word</button>
+        <button class="btn2" onclick="submitManual(true)">Save &amp; Add Another</button>
+      </div>
+    </div>`;
+}
+
+function submitManual(andAnother) {
+  const gk  = document.getElementById('man-gk')?.value?.trim();
+  const gl  = document.getElementById('man-gl')?.value?.trim();
+  if (!gk || !gl) { showToast('Greek word and gloss are required', 2600); return; }
+  const fields = {
+    gk,
+    art: document.getElementById('man-art')?.value,
+    gl,
+    pos: document.getElementById('man-pos')?.value || 'noun',
+    mo:  document.getElementById('man-mo')?.value,
+    ls:  document.getElementById('man-ls')?.value,
+    sem: document.getElementById('man-sem')?.value,
+  };
+  const targetBox = document.getElementById('man-box')?.value || 'l1';
+  const saved = saveCustomWord(fields, targetBox);
+  if (!saved) return;
+  showToast(`${saved.gk} → ${boxDef(targetBox).label} ✓`);
+  if (andAnother) renderManualAdd();
+  else setTab('study');
+}
+
+// ── QUICK ADD ─────────────────────────────────────────────────────────────────
+let _qaState = { loading: false, preview: null, error: null, targetBox: 'l1' };
+
+function renderQuickAdd() {
+  const s = _qaState;
+  document.getElementById('add-content').innerHTML = `
+    <div class="add-form">
+      <div style="font-size:12px;color:var(--pap-muted);margin-bottom:16px;line-height:1.7;">
+        Type an English word · AI generates the Koine Greek lexical form, article, morphology, and semantic range.
+      </div>
+      <div class="field">
+        <label class="lbl">English Word or Concept *</label>
+        <input class="inp" id="qa-en" placeholder="e.g. love, I believe, righteous…"
+          autocomplete="off" onkeydown="if(event.key==='Enter')generateQuickAdd()"/>
+      </div>
+      <div class="field">
+        <label class="lbl">Save to Box</label>
+        <select class="inp" id="qa-box" style="font-size:13px;padding:9px 12px;cursor:pointer;"
+          onchange="_qaState.targetBox=this.value">${boxOptions(s.targetBox)}</select>
+      </div>
+      <button class="btn1" onclick="generateQuickAdd()" ${s.loading?'disabled':''} style="margin-bottom:16px;">
+        ${s.loading?'<span class="spinner"></span> Generating…':'⚡ Generate Card'}
+      </button>
+      ${s.error?`<div class="api-missing"><strong>Error:</strong> ${s.error}</div>`:''}
+      ${s.preview?renderQAPreview(s.preview):''}
+    </div>`;
+}
+
+function escAttr(s) {
+  return String(s || '').replace(/&/g, '&amp;').replace(/"/g, '&quot;');
+}
+
+function renderQAPreview(p) {
+  const semStr = Array.isArray(p.sem) ? p.sem.join(', ') : (p.sem || '');
+  return `
+    <div class="add-preview" style="padding:18px 18px 14px;">
+      <div style="font-family:'Cinzel',serif;font-size:9px;letter-spacing:.16em;text-transform:uppercase;
+                  color:var(--lm);margin-bottom:14px;">✓ Generated — review &amp; edit before saving</div>
+
+      <div class="field">
+        <label class="lbl">Greek Lemma *</label>
+        <input class="inp inp-gk" id="prev-gk" value="${escAttr(p.gk)}" autocomplete="off" spellcheck="false"/>
+      </div>
+
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+        <div class="field">
+          <label class="lbl">Article</label>
+          <input class="inp inp-gk" id="prev-art" value="${escAttr(p.art||'')}" placeholder="ὁ / ἡ / τό" spellcheck="false"/>
+        </div>
+        <div class="field">
+          <label class="lbl">Part of Speech</label>
+          <select class="inp" id="prev-pos" style="padding:9px 12px;font-size:13px;cursor:pointer;">
+            ${POS_OPTIONS.map(o=>`<option value="${o.v}"${o.v===p.pos?' selected':''}>${o.l}</option>`).join('')}
+          </select>
+        </div>
+      </div>
+
+      <div class="field">
+        <label class="lbl">Gloss (English) *</label>
+        <input class="inp" id="prev-gl" value="${escAttr(p.gl)}" autocomplete="off"/>
+      </div>
+
+      <div class="field">
+        <label class="lbl">Morphology</label>
+        <input class="inp" id="prev-mo" value="${escAttr(p.mo||'')}" placeholder="e.g. 2nd decl., masc." spellcheck="false"/>
+      </div>
+
+      <div class="field" style="margin-bottom:4px;">
+        <label class="lbl">Semantic Range
+          <span style="font-weight:400;font-style:italic;color:var(--pap-muted2);text-transform:none;letter-spacing:0;"> — comma-separated</span>
+        </label>
+        <input class="inp" id="prev-sem" value="${escAttr(semStr)}" placeholder="grace, favor, gift…"/>
+      </div>
+
+      <div style="display:flex;gap:10px;margin-top:14px;flex-wrap:wrap;">
+        <button class="btn1" onclick="saveQA()">Save to ${boxDef(_qaState.targetBox).label}</button>
+        <button class="btn3" onclick="_qaState.preview=null;_qaState.error=null;renderQuickAdd()">Clear</button>
+      </div>
+    </div>`;
+}
+
+async function generateQuickAdd() {
+  if (!requireApi()) return;
+  const en = document.getElementById('qa-en')?.value?.trim();
+  if (!en) { showToast('Enter an English word first', 2400); return; }
+  const box = document.getElementById('qa-box')?.value || 'l1';
+  _qaState = { ..._qaState, loading: true, error: null, preview: null, targetBox: box };
+  renderQuickAdd();
+
+  const prompt = `You are an expert Koine Greek lexicographer specializing in New Testament Greek.
+Generate a vocabulary flashcard for the following English concept.
+
+English: "${en}"
+
+Provide the most relevant NT Koine Greek lexical entry. Respond ONLY with valid JSON, no markdown:
+{
+  "gk": "Greek lemma (full diacritics)",
+  "art": "article if noun: ὁ ἡ or τό — omit key if not a noun",
+  "gl": "concise English gloss (as it would appear in a lexicon)",
+  "pos": "one of: noun verb adj particle prep conj adv pronoun numeral article other",
+  "mo": "morphological description e.g. '2nd decl., masc.' or 'thematic (-ω), contract' or 'particle'",
+  "sem": ["semantic tag 1", "semantic tag 2"]
+}
+Only include sem if the word has meaningful theological or semantic range (2-5 tags max). Otherwise omit it.`;
+
+  try {
+    const r = await fetch(apiUrl(), {
+      method: 'POST',
+      headers: apiHeaders(),
+      body: JSON.stringify({
+        model: 'claude-haiku-4-5-20251001',
+        max_tokens: 400,
+        messages: [{ role: 'user', content: prompt }],
+      }),
+    });
+    const data = await r.json();
+    if (data.error) throw new Error(data.error.message || JSON.stringify(data.error));
+    const raw  = data.content?.find(c => c.type === 'text')?.text || '';
+    const parsed = JSON.parse(raw.replace(/```json|```/g, '').trim());
+    _qaState = { ..._qaState, loading: false, preview: parsed };
+  } catch(e) {
+    _qaState = { ..._qaState, loading: false, error: e.message || 'Generation failed — check settings and try again.' };
+  }
+  renderQuickAdd();
+}
+
+function saveQA() {
+  const p = _qaState.preview; if (!p) return;
+  const gk  = document.getElementById('prev-gk')?.value?.trim()  || p.gk;
+  const art  = document.getElementById('prev-art')?.value?.trim() || '';
+  const gl   = document.getElementById('prev-gl')?.value?.trim()  || p.gl;
+  const pos  = document.getElementById('prev-pos')?.value         || p.pos;
+  const mo   = document.getElementById('prev-mo')?.value?.trim()  || '';
+  const sem  = document.getElementById('prev-sem')?.value?.trim() || '';
+  const fields = { gk, art, gl, pos, mo, sem };
+  const saved = saveCustomWord(fields, _qaState.targetBox);
+  if (!saved) return;
+  showToast(`${saved.gk} → ${boxDef(_qaState.targetBox).label} ✓`);
+  _qaState = { loading: false, preview: null, error: null, targetBox: _qaState.targetBox };
+  renderQuickAdd();
+}
+
+// ── BULK ADD ──────────────────────────────────────────────────────────────────
+let _bulkState = { loading: false, results: null, targetBox: 'l1' };
+
+function renderBulkAdd() {
+  const s = _bulkState;
+  document.getElementById('add-content').innerHTML = `
+    <div class="add-form">
+      <div style="font-size:12px;color:var(--pap-muted);margin-bottom:14px;line-height:1.7;">
+        One English word or concept per line. AI generates a full Koine Greek card for each. All saved to the same box.
+      </div>
+      <div class="field">
+        <label class="lbl">Words to Add</label>
+        <textarea class="bulk-ta" id="bulk-ta" placeholder="love&#10;I believe&#10;righteousness&#10;grace&#10;covenant"></textarea>
+      </div>
+      <div class="field">
+        <label class="lbl">Save all to</label>
+        <select class="inp" id="bulk-box" style="font-size:13px;padding:9px 12px;cursor:pointer;"
+          onchange="_bulkState.targetBox=this.value">${boxOptions(s.targetBox)}</select>
+      </div>
+      <button class="btn1" onclick="runBulkAdd()" ${s.loading?'disabled':''} style="margin-bottom:16px;">
+        ${s.loading?`<span class="spinner"></span> Generating (${_bulkPending} remaining)…`:'⚡ Generate All Cards'}
+      </button>
+      ${s.loading?`<div style="font-size:11px;color:var(--pap-muted);margin-bottom:14px;font-style:italic;">Working through the list — this may take a moment…</div>`:''}
+      ${s.results?renderBulkResults(s.results):''}
+    </div>`;
+}
+
+let _bulkPending = 0;
+
+function renderBulkResults(results) {
+  const saved  = results.filter(r => !r.error).length;
+  const target = boxDef(_bulkState.targetBox).label;
+  const rows = results.map(r => r.error
+    ? `<div class="bulk-result err">
+        <span style="color:var(--l1);">✗</span>
+        <span>"${r.input}" — ${r.error}</span>
+       </div>`
+    : `<div class="bulk-result ok">
+        <span style="color:var(--lm);">✓</span>
+        <span class="bulk-result-gk">${r.gk}</span>
+        <span style="flex:1;font-size:12px;color:var(--pap-muted);">${r.gl} · <em>${r.pos}</em></span>
+       </div>`
+  ).join('');
+  return `
+    <div style="border-top:1px solid var(--border);padding-top:16px;">
+      <div style="font-family:'Cinzel',serif;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--pap-muted);margin-bottom:10px;">
+        Results — ${saved}/${results.length} saved to ${target}
+      </div>
+      ${rows}
+      <button class="btn3" style="margin-top:12px;" onclick="_bulkState.results=null;renderBulkAdd()">Clear</button>
+    </div>`;
+}
+
+async function runBulkAdd() {
+  if (!requireApi()) return;
+  const raw = document.getElementById('bulk-ta')?.value || '';
+  const lines = raw.split('\n').map(l => l.trim()).filter(Boolean);
+  if (!lines.length) { showToast('Enter at least one word', 2400); return; }
+  const box = document.getElementById('bulk-box')?.value || 'l1';
+  _bulkState  = { ..._bulkState, loading: true, results: null, targetBox: box };
+  _bulkPending = lines.length;
+  renderBulkAdd();
+
+  const results = [];
+  for (const line of lines) {
+    _bulkPending--;
+    const prompt = `You are an expert Koine Greek lexicographer. Generate a NT Greek vocabulary card.
+English: "${line}"
+Respond ONLY with valid JSON, no markdown:
+{"gk":"lemma with full diacritics","art":"ὁ ἡ or τό if noun else omit","gl":"concise lexicon gloss","pos":"noun|verb|adj|particle|prep|conj|adv|pronoun|numeral|article|other","mo":"morphological description","sem":["tag1","tag2"]}
+Only include sem for theologically/semantically rich words. Keep gl concise.`;
+    try {
+      const r = await fetch(apiUrl(), {
+        method: 'POST',
+        headers: apiHeaders(),
+        body: JSON.stringify({
+          model: 'claude-haiku-4-5-20251001',
+          max_tokens: 350,
+          messages: [{ role: 'user', content: prompt }],
+        }),
+      });
+      const data = await r.json();
+      if (data.error) throw new Error(data.error.message || 'API error');
+      const raw2 = data.content?.find(c => c.type === 'text')?.text || '';
+      const p    = JSON.parse(raw2.replace(/```json|```/g, '').trim());
+      // Save immediately
+      const semStr = p.sem?.join(', ') || '';
+      saveCustomWord({ gk: p.gk, art: p.art||'', gl: p.gl, pos: p.pos||'noun', mo: p.mo||'', sem: semStr }, box);
+      results.push({ input: line, gk: p.gk, gl: p.gl, pos: p.pos });
+    } catch(e) {
+      results.push({ input: line, error: e.message || 'Generation failed' });
+    }
+  }
+  _bulkState = { ..._bulkState, loading: false, results };
+  renderBulkAdd();
+}
+
+// ── VERSE LOOKUP ──────────────────────────────────────────────────────────────
+let _verseState = { loading: false, preview: null, error: null, targetBox: 'l1' };
+
+function renderVerseLookup() {
+  const s = _verseState;
+  document.getElementById('add-content').innerHTML = `
+    <div class="add-form">
+      <div style="font-size:12px;color:var(--pap-muted);margin-bottom:16px;line-height:1.7;">
+        Type a word and a NT verse reference. AI identifies the original Greek word in that verse and builds a full flashcard.
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+        <div class="field">
+          <label class="lbl">English Word / Concept *</label>
+          <input class="inp" id="vs-word" placeholder="e.g. love" autocomplete="off"/>
+        </div>
+        <div class="field">
+          <label class="lbl">Verse Reference *</label>
+          <input class="inp" id="vs-ref" placeholder="e.g. John 3:16" autocomplete="off"
+            onkeydown="if(event.key==='Enter')generateVerseLookup()"/>
+        </div>
+      </div>
+      <div class="field">
+        <label class="lbl">Save to Box</label>
+        <select class="inp" id="vs-box" style="font-size:13px;padding:9px 12px;cursor:pointer;"
+          onchange="_verseState.targetBox=this.value">${boxOptions(s.targetBox)}</select>
+      </div>
+      <button class="btn1" onclick="generateVerseLookup()" ${s.loading?'disabled':''} style="margin-bottom:16px;">
+        ${s.loading?'<span class="spinner"></span> Looking up…':'📖 Look Up Verse'}
+      </button>
+      ${s.error?`<div class="api-missing"><strong>Error:</strong> ${s.error}</div>`:''}
+      ${s.preview?renderVersePreview(s.preview):''}
+    </div>`;
+}
+
+function renderVersePreview(p) {
+  const semHtml = p.sem?.length
+    ? `<div class="sem-pills" style="margin-top:4px;">${p.sem.map(s=>`<span class="sem-pill">${s}</span>`).join('')}</div>` : '';
+  return `
+    <div class="add-preview">
+      <div class="add-preview-label" style="margin-bottom:8px;">
+        Found in <strong style="color:var(--goldD);">${p.verse}</strong>
+      </div>
+      <div class="add-preview-gk" id="vs-prev-gk" contenteditable="true" style="outline:none;border-bottom:1px dashed rgba(160,120,24,0.3);padding-bottom:3px;">${p.gk}</div>
+      ${p.art?`<div class="add-preview-art" id="vs-prev-art" contenteditable="true" style="outline:none;">${p.art}</div>`:'<div id="vs-prev-art"></div>'}
+      <div class="add-preview-gl" id="vs-prev-gl" contenteditable="true" style="outline:none;">${p.gl}</div>
+      <div class="add-preview-row">
+        <div>
+          <div class="add-preview-label">POS</div>
+          <select id="vs-prev-pos" style="font-size:12px;padding:4px 8px;border:1px solid var(--border);border-radius:6px;background:var(--card);color:var(--pap-ink);cursor:pointer;font-family:inherit;">
+            ${POS_OPTIONS.map(o=>`<option value="${o.v}"${o.v===p.pos?' selected':''}>${o.l}</option>`).join('')}
+          </select>
+        </div>
+        <div style="flex:1;">
+          <div class="add-preview-label">Morphology</div>
+          <div class="add-preview-val" id="vs-prev-mo" contenteditable="true" style="outline:none;">${p.mo||''}</div>
+        </div>
+      </div>
+      ${semHtml}
+      <div style="font-size:11px;color:var(--pap-muted);margin-top:10px;font-style:italic;line-height:1.6;">${p.note||''}</div>
+      <div style="display:flex;gap:10px;margin-top:14px;flex-wrap:wrap;">
+        <button class="btn1" onclick="saveVerse()">Save to ${boxDef(_verseState.targetBox).label}</button>
+        <button class="btn3" onclick="_verseState.preview=null;_verseState.error=null;renderVerseLookup()">Clear</button>
+      </div>
+    </div>`;
+}
+
+async function generateVerseLookup() {
+  if (!requireApi()) return;
+  const word = document.getElementById('vs-word')?.value?.trim();
+  const ref  = document.getElementById('vs-ref')?.value?.trim();
+  if (!word || !ref) { showToast('Enter both a word and a verse reference', 2600); return; }
+  const box  = document.getElementById('vs-box')?.value || 'l1';
+  _verseState = { ..._verseState, loading: true, error: null, preview: null, targetBox: box };
+  renderVerseLookup();
+
+  const prompt = `You are an expert NT Greek scholar with deep knowledge of the Greek New Testament (NA28/UBS5).
+
+The user wants to learn the Greek word behind the English concept "${word}" as it appears in ${ref}.
+
+1. Identify the specific Greek word (lexical/dictionary form) that corresponds to "${word}" in ${ref}.
+2. Build a complete vocabulary flashcard for that word.
+
+Respond ONLY with valid JSON, no markdown:
+{
+  "gk": "lexical form with full diacritics",
+  "art": "ὁ ἡ or τό if noun, omit otherwise",
+  "gl": "standard lexicon gloss",
+  "pos": "noun|verb|adj|particle|prep|conj|adv|pronoun|numeral|article|other",
+  "mo": "morphological description e.g. '2nd decl., masc.' or 'thematic (-ω)'",
+  "sem": ["tag1","tag2"],
+  "verse": "${ref}",
+  "note": "one sentence: how this word is used or inflected in ${ref} specifically"
+}
+Be precise. Use the actual lemma from standard NT Greek lexicons (BDAG). Only sem if meaningful.`;
+
+  try {
+    const r = await fetch(apiUrl(), {
+      method: 'POST',
+      headers: apiHeaders(),
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-6',
+        max_tokens: 500,
+        messages: [{ role: 'user', content: prompt }],
+      }),
+    });
+    const data = await r.json();
+    if (data.error) throw new Error(data.error.message || JSON.stringify(data.error));
+    const raw  = data.content?.find(c => c.type === 'text')?.text || '';
+    const parsed = JSON.parse(raw.replace(/```json|```/g, '').trim());
+    _verseState = { ..._verseState, loading: false, preview: parsed };
+  } catch(e) {
+    _verseState = { ..._verseState, loading: false, error: e.message || 'Lookup failed — check settings and try again.' };
+  }
+  renderVerseLookup();
+}
+
+function saveVerse() {
+  const p = _verseState.preview; if (!p) return;
+  const gk  = document.getElementById('vs-prev-gk')?.innerText?.trim()  || p.gk;
+  const art  = document.getElementById('vs-prev-art')?.innerText?.trim() || p.art || '';
+  const gl   = document.getElementById('vs-prev-gl')?.innerText?.trim()  || p.gl;
+  const pos  = document.getElementById('vs-prev-pos')?.value             || p.pos;
+  const mo   = document.getElementById('vs-prev-mo')?.innerText?.trim()  || p.mo || '';
+  const fields = { gk, art, gl, pos, mo, sem: p.sem?.join(', ') || '' };
+  const saved = saveCustomWord(fields, _verseState.targetBox);
+  if (!saved) return;
+  showToast(`${saved.gk} → ${boxDef(_verseState.targetBox).label} ✓`);
+  _verseState = { loading: false, preview: null, error: null, targetBox: _verseState.targetBox };
+  renderVerseLookup();
+}
+
+// ───────────────────────────────────────────────────────────────────────────
+// STATS TAB
+// (full book readiness calculation coming in Feature 5)
+// ───────────────────────────────────────────────────────────────────────────
+// ── Study streak helper ───────────────────────────────────────────────────
+// ── Streak helper ─────────────────────────────────────────────────────────
+function computeStreak(sessions) {
+  if (!sessions || !sessions.length) return 0;
+  const daySet = [...new Set(sessions.map(s => new Date(s.ts).toDateString()))];
+  daySet.sort((a, b) => new Date(b) - new Date(a));
+  const todayStr = new Date().toDateString();
+  const yday = new Date(); yday.setDate(yday.getDate() - 1);
+  if (daySet[0] !== todayStr && daySet[0] !== yday.toDateString()) return 0;
+  let streak = 1;
+  for (let i = 1; i < daySet.length; i++) {
+    if (Math.round((new Date(daySet[i-1]) - new Date(daySet[i])) / 86400000) === 1) streak++;
+    else break;
+  }
+  return streak;
+}
+
+// ── Stats filter state ────────────────────────────────────────────────────
+let statsFilter = 'lifetime'; // 'week' | 'month' | 'lifetime'
+
+function setStatsFilter(f) {
+  statsFilter = f;
+  renderStats();
+}
+
+function renderStats() {
+  const boxes    = getBoxes();
+  const stats    = getStats();
+  const allSess  = stats.sessions || [];
+
+  // ── Filter sessions by period ─────────────────────────────────────────────
+  const now  = Date.now();
+  const DAY  = 86400000;
+  const cutoffs = { week: now - 7*DAY, month: now - 30*DAY, lifetime: 0 };
+  const cutoff  = cutoffs[statsFilter] || 0;
+  const filtSess = allSess.filter(s => s.ts >= cutoff);
+
+  // ── Period-filtered metrics ───────────────────────────────────────────────
+  const sessCount   = filtSess.length;
+  const cardsTotal  = filtSess.reduce((a, s) => a + (s.total   || 0), 0);
+  const cardsCorr   = filtSess.reduce((a, s) => a + (s.correct || 0), 0);
+  const accuracy    = cardsTotal > 0 ? Math.round(cardsCorr / cardsTotal * 100) : null;
+  const bestAcc     = filtSess.length
+    ? Math.max(...filtSess.filter(s => s.total >= 5).map(s => Math.round(s.correct/s.total*100)), 0)
+    : 0;
+
+  // ── Snapshot metrics (always current) ────────────────────────────────────
+  const boxCounts = {};
+  BOXES.forEach(b => { boxCounts[b.id] = (boxes[b.id] || []).length; });
+
+  // Separate lexicon words from custom words in study
+  const allWords      = getWords();
+  const studiedUids   = new Set(Object.values(boxes).flat().map(String));
+  const lexInStudy    = allWords.filter(w => w.lexId != null && studiedUids.has(String(w.id))).length;
+  const customInStudy = allWords.filter(w => w.isCustom  && studiedUids.has(String(w.id))).length;
+  const masteredUids  = new Set((boxes.mastered || []).map(String));
+  const lexMastered   = allWords.filter(w => w.lexId != null && masteredUids.has(String(w.id))).length;
+
+  const streak    = computeStreak(allSess);
+  const parseBest = parseInt(localStorage.getItem('logos-parse-best') || '0');
+
+  // ── Period label ──────────────────────────────────────────────────────────
+  const periodLabel = { week: 'This Week', month: 'This Month', lifetime: 'All Time' }[statsFilter];
+
+  let html = '';
+
+  // ── Filter pill row ───────────────────────────────────────────────────────
+  html += `<div style="display:flex;gap:6px;margin-bottom:20px;">`;
+  ['week','month','lifetime'].forEach(f => {
+    const labels = { week:'Week', month:'Month', lifetime:'Lifetime' };
+    const active = statsFilter === f;
+    html += `<button onclick="setStatsFilter('${f}')" style="
+      flex:1;border:1px solid ${active ? 'rgba(160,120,24,0.5)' : 'var(--border)'};
+      border-radius:20px;padding:7px 6px;cursor:pointer;font-family:'Cinzel',serif;
+      font-size:10px;letter-spacing:.1em;text-transform:uppercase;
+      background:${active ? 'var(--goldP)' : 'transparent'};
+      color:${active ? 'var(--goldD)' : 'var(--pap-muted)'};
+      font-weight:${active ? '700' : '400'};transition:all .15s;">${labels[f]}</button>`;
+  });
+  html += `</div>`;
+
+  // ── Period performance tiles (4-up) ───────────────────────────────────────
+  html += `<div style="display:grid;grid-template-columns:repeat(2,1fr);gap:9px;margin-bottom:18px;">`;
+  [
+    {
+      label: 'Sessions',
+      val: sessCount,
+      sub: periodLabel,
+      col: sessCount > 0 ? 'var(--goldD)' : 'var(--pap-muted)',
+    },
+    {
+      label: 'Cards Reviewed',
+      val: cardsTotal,
+      sub: periodLabel,
+      col: cardsTotal > 0 ? 'var(--goldD)' : 'var(--pap-muted)',
+    },
+    {
+      label: 'Accuracy',
+      val: accuracy !== null ? accuracy + '%' : '—',
+      sub: periodLabel,
+      col: accuracy === null ? 'var(--pap-muted)' : accuracy >= 70 ? 'var(--goldD)' : 'var(--l1)',
+    },
+    {
+      label: 'Best Session',
+      val: bestAcc > 0 ? bestAcc + '%' : '—',
+      sub: 'highest accuracy',
+      col: bestAcc >= 80 ? 'var(--lm)' : bestAcc > 0 ? 'var(--goldD)' : 'var(--pap-muted)',
+    },
+  ].forEach(s => {
+    html += `<div class="card2" style="text-align:center;padding:16px 10px;">
+      <div style="font-family:'Cinzel',serif;font-size:26px;font-weight:700;
+                  color:${s.col};line-height:1;">${s.val}</div>
+      <div style="font-size:9px;color:var(--pap-muted);letter-spacing:.09em;
+                  text-transform:uppercase;margin-top:4px;">${s.label}</div>
+      <div style="font-size:10px;color:var(--pap-muted2);margin-top:2px;
+                  font-style:italic;">${s.sub}</div>
+    </div>`;
+  });
+  html += `</div>`;
+
+  // ── Snapshot tiles: core words in study + mastered ───────────────────────
+  html += `<div style="display:grid;grid-template-columns:repeat(2,1fr);gap:9px;margin-bottom:${customInStudy > 0 ? '8' : '18'}px;">`;
+  [
+    {
+      label: 'Core in Study',
+      val:   lexInStudy,
+      sub:   `of 301 NT words`,
+      col:   lexInStudy > 0 ? 'var(--goldD)' : 'var(--pap-muted)',
+    },
+    {
+      label: 'Mastered',
+      val:   lexMastered,
+      sub:   'core words learned',
+      col:   lexMastered > 0 ? 'var(--lm)' : 'var(--pap-muted)',
+    },
+  ].forEach(s => {
+    html += `<div class="card" style="text-align:center;padding:14px 10px;border:1px solid var(--border);border-radius:11px;">
+      <div style="font-family:'Cinzel',serif;font-size:26px;font-weight:700;
+                  color:${s.col};line-height:1;">${s.val}</div>
+      <div style="font-size:9px;color:var(--pap-muted);letter-spacing:.09em;
+                  text-transform:uppercase;margin-top:4px;">${s.label}</div>
+      <div style="font-size:10px;color:var(--pap-muted2);margin-top:2px;
+                  font-style:italic;">${s.sub}</div>
+    </div>`;
+  });
+  html += `</div>`;
+
+  // Show custom word count as a small note if any exist
+  if (customInStudy > 0) {
+    html += `<div style="text-align:right;font-size:10px;color:var(--pap-muted2);
+                         font-style:italic;margin-bottom:18px;">
+      + ${customInStudy} custom word${customInStudy !== 1 ? 's' : ''} in study
+    </div>`;
+  }
+
+  // ── Badges ────────────────────────────────────────────────────────────────
+  if (streak > 0 || parseBest > 0) {
+    html += `<div style="display:flex;gap:8px;margin-bottom:22px;flex-wrap:wrap;">`;
+    if (streak > 0)   html += `<span class="badge badge-gold" style="padding:7px 14px;font-size:11px;">🔥 ${streak}-day streak</span>`;
+    if (parseBest > 0) html += `<span class="badge badge-gold" style="padding:7px 14px;font-size:11px;">⚡ Parse best · ${parseBest}</span>`;
+    html += `</div>`;
+  }
+
+  // ── Level distribution (snapshot) ────────────────────────────────────────
+  html += sHead('Level Distribution');
+  const displayBoxes = BOXES.filter(b => !b.isQueue);
+  const maxCount = Math.max(...displayBoxes.map(b => boxCounts[b.id] || 0), 1);
+  html += `<div style="margin-bottom:22px;">`;
+  displayBoxes.forEach(b => {
+    const count  = boxCounts[b.id] || 0;
+    const barPct = Math.round(count / maxCount * 100);
+    html += `
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:9px;">
+        <div style="font-family:'Cinzel',serif;font-size:9px;letter-spacing:.07em;min-width:70px;
+                    text-transform:uppercase;color:${b.color};font-weight:600;">${b.label}</div>
+        <div style="flex:1;height:7px;background:rgba(0,0,0,0.06);border-radius:4px;overflow:hidden;">
+          <div style="height:100%;border-radius:4px;background:${b.color};width:${barPct}%;
+                      opacity:0.78;transition:width .5s ease;"></div>
+        </div>
+        <div style="font-family:'Cinzel',serif;font-size:11px;font-weight:700;
+                    min-width:22px;text-align:right;color:${b.color};">${count}</div>
+      </div>`;
+  });
+  html += `</div>`;
+
+  // ── Session log (filtered) ────────────────────────────────────────────────
+  const logLimit  = statsFilter === 'week' ? 7 : statsFilter === 'month' ? 14 : 10;
+  const logSess   = [...filtSess].reverse().slice(0, logLimit);
+  if (logSess.length > 0) {
+    html += sHead(`Sessions · ${periodLabel}`);
+    html += `<div class="card2" style="margin-bottom:22px;padding:4px 16px;">`;
+    logSess.forEach((s, idx) => {
+      const d      = new Date(s.ts);
+      const acc    = s.total > 0 ? Math.round(s.correct / s.total * 100) : 0;
+      const dayStr = d.toLocaleDateString('en-US', { weekday:'short', month:'short', day:'numeric' });
+      const accCol = acc >= 80 ? 'var(--lm)' : acc >= 60 ? 'var(--goldD)' : acc > 0 ? 'var(--l1)' : 'var(--pap-muted)';
+      const bdr    = idx < logSess.length - 1 ? 'border-bottom:1px solid rgba(0,0,0,0.06);' : '';
+      html += `
+        <div style="display:flex;align-items:center;justify-content:space-between;padding:9px 0;${bdr}">
+          <div style="font-size:12px;color:var(--pap-muted);">${dayStr}</div>
+          <div style="display:flex;gap:14px;align-items:center;">
+            <div style="font-size:11px;color:var(--pap-muted2);">${s.total} cards</div>
+            <div style="font-family:'Cinzel',serif;font-size:11px;font-weight:700;
+                        color:${accCol};min-width:30px;text-align:right;">${acc}%</div>
+          </div>
+        </div>`;
+    });
+    html += `</div>`;
+  } else if (sessCount === 0) {
+    html += `<div style="font-size:12px;color:var(--pap-muted2);font-style:italic;
+                         margin-bottom:22px;">No sessions recorded ${statsFilter === 'lifetime' ? 'yet' : 'in this period'}.</div>`;
+  }
+
+  // ── NT Book Readiness (snapshot) ──────────────────────────────────────────
+  const NT_TOTAL   = 138162;
+  const masteredIds = new Set((boxes.mastered || []).map(String));
+  const studiedIds  = new Set(
+    Object.entries(boxes)
+      .filter(([k]) => k !== 'mastered')
+      .flatMap(([, arr]) => arr.map(String))
+  );
+
+  html += sHead('NT Book Readiness');
+  html += `<div style="font-size:11px;color:var(--pap-muted);font-style:italic;
+                       margin-bottom:14px;line-height:1.6;">
+    Estimated vocabulary coverage per book · green = mastered · gold = in study</div>`;
+
+  BOOKS.forEach(book => {
+    let covMastered = 0, covStudied = 0, covTotal = 0;
+    LEXICON.forEach(w => {
+      const p = 1 - Math.pow(Math.max(0, (NT_TOTAL - book.total) / NT_TOTAL), w.occ);
+      covTotal += p;
+      if (masteredIds.has(String(w.id)))     covMastered += p;
+      else if (studiedIds.has(String(w.id))) covStudied  += p;
+    });
+    const mastPct  = covTotal > 0 ? Math.round(covMastered / covTotal * 100) : 0;
+    const studPct  = covTotal > 0 ? Math.round((covMastered + covStudied) / covTotal * 100) : 0;
+    const pctColor = mastPct >= 50 ? 'var(--lm)' : mastPct >= 20 ? 'var(--goldD)' : 'var(--pap-muted)';
+
+    html += `
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px;">
+        <div class="stat-book-name">${book.name}</div>
+        <div style="flex:1;height:7px;background:rgba(0,0,0,0.07);border-radius:5px;overflow:hidden;position:relative;">
+          <div style="position:absolute;top:0;left:0;height:100%;border-radius:5px;
+                      background:rgba(201,160,37,0.28);width:${studPct}%;"></div>
+          <div style="position:absolute;top:0;left:0;height:100%;border-radius:5px;
+                      background:linear-gradient(90deg,var(--lm),#4A8A5A);width:${mastPct}%;"></div>
+        </div>
+        <div class="stat-book-pct" style="color:${pctColor};">${mastPct}%</div>
+      </div>`;
+  });
+
+  html += `
+    <div style="display:flex;gap:16px;margin-top:10px;font-size:10px;color:var(--pap-muted);flex-wrap:wrap;">
+      <span style="display:inline-flex;align-items:center;gap:6px;">
+        <span style="display:inline-block;width:14px;height:6px;border-radius:3px;
+                     background:linear-gradient(90deg,var(--lm),#4A8A5A);"></span>Mastered
+      </span>
+      <span style="display:inline-flex;align-items:center;gap:6px;">
+        <span style="display:inline-block;width:14px;height:6px;border-radius:3px;
+                     background:rgba(201,160,37,0.28);"></span>In Study
+      </span>
+    </div>`;
+
+  // ── Export / Import ───────────────────────────────────────────────────────
+  html += `
+    <div style="margin-top:32px;padding-top:22px;border-top:1px solid var(--border);">
+      ${sHead('Data &amp; Backup')}
+      <div style="font-size:11px;color:var(--pap-muted);font-style:italic;margin-bottom:14px;line-height:1.6;">
+        Export saves everything — words, levels, stats, settings — as a single JSON file.
+        Import overwrites your current data and reloads the app.
+      </div>
+      <div style="display:flex;gap:10px;flex-wrap:wrap;">
+        <button class="btn2" onclick="exportData()">↓ Export Backup</button>
+        <label class="btn2" style="cursor:pointer;display:inline-flex;align-items:center;">
+          ↑ Import Backup
+          <input type="file" accept=".json" onchange="importData(event)" style="display:none;"/>
+        </label>
+      </div>
+    </div>`;
+
+  document.getElementById('stats-content').innerHTML = html;
+}
+
+// ── Export all data as JSON download ──────────────────────────────────────
+function exportData() {
+  const keys = ['logos-words','logos-boxes','logos-stats','logos-settings','logos-parse-best','logos-session'];
+  const data  = { version: 1, exported: new Date().toISOString() };
+  keys.forEach(k => {
+    const raw = localStorage.getItem(k);
+    try { data[k] = raw !== null ? JSON.parse(raw) : null; }
+    catch { data[k] = raw; }
+  });
+  // Include API key (user's own data — needed for cross-device restore)
+  data['logos-apikey'] = localStorage.getItem('logos-apikey') || '';
+
+  const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+  const url  = URL.createObjectURL(blob);
+  const a    = document.createElement('a');
+  a.href     = url;
+  a.download = `o-logos-backup-${new Date().toISOString().slice(0, 10)}.json`;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+  showToast('Backup exported ✓');
+}
+
+// ── Import from JSON file ─────────────────────────────────────────────────
+function importData(e) {
+  const file = e.target.files?.[0]; if (!file) return;
+  const reader = new FileReader();
+  reader.onload = function(ev) {
+    try {
+      const data = JSON.parse(ev.target.result);
+      // Basic validation
+      if (!data['logos-words'] && !data['logos-boxes']) {
+        showToast('⚠ Invalid backup file', 3000); return;
+      }
+      const storageKeys = ['logos-words','logos-boxes','logos-stats','logos-settings','logos-parse-best','logos-session'];
+      storageKeys.forEach(k => {
+        if (data[k] !== undefined && data[k] !== null)
+          localStorage.setItem(k, JSON.stringify(data[k]));
+      });
+      if (data['logos-apikey']) localStorage.setItem('logos-apikey', data['logos-apikey']);
+      showToast('Import successful — reloading…', 2200);
+      setTimeout(() => location.reload(), 2200);
+    } catch(err) {
+      showToast('Import failed — invalid JSON', 3000);
+    }
+  };
+  reader.readAsText(file);
+}
+
+// ───────────────────────────────────────────────────────────────────────────
+// LEXICON TAB
+// ───────────────────────────────────────────────────────────────────────────
+const lexState = { search: '', pos: 'all', sort: 'freq', lesson: null, expanded: null };
+
+// Strip Greek diacritics for alphabetical sort
+function stripDia(s) {
+  return s.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase();
+}
+
+// Return a Map of lexId → { wordId, boxId } for currently studied words
+function getStudyMap() {
+  const words = getWords();
+  const boxes = getBoxes();
+  const uidBox = {};
+  Object.entries(boxes).forEach(([bid, uids]) => uids.forEach(u => { uidBox[u] = bid; }));
+  const map = new Map();
+  words.forEach(w => { if (w.lexId != null) map.set(w.lexId, { wordId: w.id, boxId: uidBox[w.id] }); });
+  return map;
+}
+
+function getFilteredLexicon() {
+  let list = [...LEXICON];
+  // POS filter
+  if (lexState.pos !== 'all') {
+    const core = ['noun','verb','adj'];
+    list = list.filter(w => lexState.pos === 'other' ? !core.includes(w.pos) : w.pos === lexState.pos);
+  }
+  // Lesson filter
+  if (lexState.lesson) {
+    const [lo, hi] = lexState.lesson;
+    list = list.filter(w => w.ls >= lo && w.ls <= hi);
+  }
+  // Search
+  if (lexState.search) {
+    const q = lexState.search.toLowerCase();
+    list = list.filter(w => stripDia(w.gk).includes(q) || w.gl.toLowerCase().includes(q));
+  }
+  // Sort
+  if (lexState.sort === 'alpha') {
+    list.sort((a, b) => stripDia(a.gk).localeCompare(stripDia(b.gk)));
+  } else {
+    list.sort((a, b) => b.occ - a.occ);
+  }
+  return list;
+}
+
+function setLexLesson(range) {
+  lexState.lesson = range;
+  // Update pill active states
+  const pills = document.querySelectorAll('#lex-lesson-pills .lex-pill');
+  pills.forEach((btn, i) => {
+    const isAll = (range === null && i === 0);
+    // Match by index: 0=All, 1=[1,5], 2=[6,10], 3=[11,15], 4=[16,20], 5=[21,25], 6=[26,33]
+    const ranges = [null,[1,5],[6,10],[11,15],[16,20],[21,25],[26,33]];
+    const match  = JSON.stringify(ranges[i]) === JSON.stringify(range);
+    btn.classList.toggle('active', match);
+  });
+  renderLexicon();
+}
+
+function posLabel(pos) {
+  const map = { noun:'Noun', verb:'Verb', adj:'Adj', particle:'Particle',
+    prep:'Prep', conj:'Conj', adv:'Adv', pronoun:'Pronoun',
+    numeral:'Numeral', article:'Article' };
+  return map[pos] || pos;
+}
+
+function renderLexicon() {
+  const list    = getFilteredLexicon();
+  const studyMap = getStudyMap();
+  const countEl = document.getElementById('lex-count');
+  const listEl  = document.getElementById('lex-list');
+  if (!countEl || !listEl) return;
+
+  countEl.textContent = `Showing ${list.length} of ${LEXICON.length} words`;
+
+  listEl.innerHTML = list.map(w => {
+    const studied  = studyMap.has(w.id);
+    const entry    = studied ? studyMap.get(w.id) : null;
+    const boxLabel = entry ? boxDef(entry.boxId).label : '';
+    const isExp    = lexState.expanded === w.id;
+
+    const artHtml  = w.art ? `<span class="lex-art">${w.art}</span>` : '';
+    const badgeCls = posBadgeClass(w.pos);
+    const actionHtml = studied
+      ? `<span class="lex-in-study-badge">${boxLabel}</span>`
+      : `<button class="lex-add-btn" onclick="addLexWord(${w.id},'l1',event)">+ Add</button>`;
+
+    // Detail panel
+    const semHtml = w.sem && w.sem.length
+      ? `<div class="lex-detail-label">Semantic Range</div>
+         <div class="sem-pills">${w.sem.map(s => `<span class="sem-pill">${s}</span>`).join('')}</div>`
+      : '';
+
+    const lessonHtml = w.ls > 0
+      ? `<div><div class="lex-detail-label">Croy Lesson</div><div class="lex-detail-val">${w.ls}</div></div>`
+      : '';
+
+    // Box action buttons in detail
+    let boxRowHtml = '';
+    if (studied && entry) {
+      const moveButtons = BOXES.filter(b => !b.isQueue).map(b =>
+        `<button class="lex-box-btn${b.id === entry.boxId ? ' is-current' : ''}"
+           onclick="moveLexWord(${w.id},'${b.id}',event)">${b.label}</button>`
+      ).join('');
+      boxRowHtml = `<div class="lex-box-row">
+        <span class="lex-box-row-label">Move to →</span>
+        ${moveButtons}
+        <button class="lex-remove-btn" onclick="removeLexWord(${w.id},event)">Remove</button>
+      </div>`;
+    } else {
+      const addButtons = BOXES.filter(b => !b.isQueue && b.id !== 'mastered').map(b =>
+        `<button class="lex-box-btn" onclick="addLexWord(${w.id},'${b.id}',event)">${b.label}</button>`
+      ).join('');
+      boxRowHtml = `<div class="lex-box-row">
+        <span class="lex-box-row-label">Add to →</span>
+        ${addButtons}
+      </div>`;
+    }
+
+    return `
+      <div class="lex-row${studied ? ' in-study' : ''}${isExp ? ' expanded' : ''}" id="lex-row-${w.id}">
+        <div class="lex-row-main" onclick="toggleLexRow(${w.id})">
+          <div class="lex-gk-wrap">
+            <span class="lex-gk-text">${w.gk}</span>${artHtml}
+          </div>
+          <span class="badge ${badgeCls}" style="flex-shrink:0;">${posLabel(w.pos)}</span>
+          <div class="lex-gl-wrap">${w.gl}</div>
+          <div class="lex-occ">${w.occ.toLocaleString()}×</div>
+          ${actionHtml}
+          <span class="lex-chevron">▼</span>
+        </div>
+        <div class="lex-detail">
+          <div class="lex-detail-grid">
+            <div>
+              <div class="lex-detail-label">Morphology</div>
+              <div class="lex-detail-val">${w.mo}</div>
+            </div>
+            <div>
+              <div class="lex-detail-label">NT Occurrences</div>
+              <div class="lex-detail-val">${w.occ.toLocaleString()} times</div>
+            </div>
+            ${lessonHtml}
+            ${w.art ? `<div><div class="lex-detail-label">Gender / Article</div><div class="lex-detail-val">${w.art} (${w.art==='ὁ'?'masculine':w.art==='ἡ'?'feminine':'neuter'})</div></div>` : ''}
+          </div>
+          ${semHtml}
+          ${boxRowHtml}
+        </div>
+      </div>`;
+  }).join('');
+}
+
+function toggleLexRow(id) {
+  lexState.expanded = (lexState.expanded === id) ? null : id;
+  renderLexicon();
+}
+
+function onLexSearch(val) {
+  lexState.search = val.toLowerCase().trim();
+  lexState.expanded = null;
+  renderLexicon();
+}
+
+function setLexPos(pos) {
+  lexState.pos = pos;
+  lexState.expanded = null;
+  document.querySelectorAll('.lex-pos-pills .lex-pill').forEach(el => {
+    el.classList.toggle('active', el.textContent.toLowerCase().startsWith(pos) || (pos==='all' && el.textContent==='All'));
+  });
+  renderLexicon();
+}
+
+function setLexSort(mode) {
+  lexState.sort = mode;
+  document.getElementById('sort-freq').classList.toggle('active', mode === 'freq');
+  document.getElementById('sort-alpha').classList.toggle('active', mode === 'alpha');
+  renderLexicon();
+}
+
+function addLexWord(lexId, boxId, e) {
+  if (e) e.stopPropagation();
+  const lex = lexById(lexId);
+  if (!lex) return;
+  const studyMap = getStudyMap();
+  if (studyMap.has(lexId)) { showToast(`${lex.gk} is already in your boxes`); return; }
+  const wordObj = {
+    id:    uid(),
+    lexId: lexId,
+    gk:    lex.gk,
+    art:   lex.art || null,
+    gl:    lex.gl,
+    pos:   lex.pos,
+    mo:    lex.mo,
+    sem:   lex.sem || null,
+    added: Date.now(),
+    lastReviewed: null,
+  };
+  const words = getWords(); words.push(wordObj); saveWords(words);
+  const boxes = getBoxes();
+  if (!boxes[boxId]) boxes[boxId] = [];
+  boxes[boxId].push(wordObj.id); saveBoxes(boxes);
+  showToast(`${lex.gk} → ${boxDef(boxId).label}`);
+  renderLexicon();
+  renderStudy();
+}
+
+function moveLexWord(lexId, newBoxId, e) {
+  if (e) e.stopPropagation();
+  const lex = lexById(lexId);
+  const words = getWords();
+  const wordObj = words.find(w => w.lexId === lexId);
+  if (!wordObj) return;
+  const boxes = getBoxes();
+  Object.keys(boxes).forEach(bid => { boxes[bid] = boxes[bid].filter(u => u !== wordObj.id); });
+  if (!boxes[newBoxId]) boxes[newBoxId] = [];
+  boxes[newBoxId].push(wordObj.id);
+  saveBoxes(boxes);
+  showToast(`${lex.gk} → ${boxDef(newBoxId).label}`);
+  renderLexicon();
+  renderStudy();
+}
+
+function removeLexWord(lexId, e) {
+  if (e) e.stopPropagation();
+  const lex = lexById(lexId);
+  if (!confirm(`Remove ${lex.gk} from your study boxes?`)) return;
+  const words = getWords();
+  const wordObj = words.find(w => w.lexId === lexId);
+  if (!wordObj) return;
+  saveWords(words.filter(w => w.id !== wordObj.id));
+  const boxes = getBoxes();
+  Object.keys(boxes).forEach(bid => { boxes[bid] = boxes[bid].filter(u => u !== wordObj.id); });
+  saveBoxes(boxes);
+  lexState.expanded = null;
+  showToast(`${lex.gk} removed`);
+  renderLexicon();
+  renderStudy();
+}
+
+// ───────────────────────────────────────────────────────────────────────────
+// INIT
+// ───────────────────────────────────────────────────────────────────────────
+// ═══════════════════════════════════════════════════════════════════════════
+// FEATURE 4 — PARSE TAB (60-second morphology sprints)
+// ═══════════════════════════════════════════════════════════════════════════
+
+const PARSE_TIMER_MAX = 60;
+let parseState = null; // { pool, qs, qi, timer, correct, total, intervalId, answered }
+
+// ── Word pool for parse drills ────────────────────────────────────────────
+function getParsePool() {
+  const boxes = getBoxes();
+  const studiedIds = new Set();
+  Object.values(boxes).forEach(arr => arr.forEach(id => studiedIds.add(String(id))));
+
+  // Build full word map: LEXICON + custom words
+  const customWords = getWords().filter(w => w.isCustom);
+  const allWords = [...LEXICON, ...customWords];
+
+  let pool = allWords.filter(w => studiedIds.has(String(w.id)));
+
+  // Supplement with top-frequency LEXICON words if pool is thin
+  if (pool.length < 15) {
+    const poolIds = new Set(pool.map(w => String(w.id)));
+    for (const lex of LEXICON) {
+      if (!poolIds.has(String(lex.id))) { pool.push(lex); poolIds.add(String(lex.id)); }
+      if (pool.length >= 40) break;
+    }
+  }
+  return pool;
+}
+
+// ── Morphology extractors ─────────────────────────────────────────────────
+function extractDecl(mo) {
+  if (!mo) return null;
+  if (mo.includes('1st decl')) return '1st Declension';
+  if (mo.includes('2nd decl')) return '2nd Declension';
+  if (mo.includes('3rd decl')) return '3rd Declension';
+  return null;
+}
+
+function extractVerbType(mo) {
+  if (!mo) return null;
+  const m = mo.toLowerCase();
+  if (m.includes('athematic deponent') || (m.includes('deponent') && m.includes('athematic'))) return 'μι-Verb';
+  if (m.includes('deponent')) return 'Deponent';
+  if (m.includes('athematic') || m.includes('-μι')) return 'μι-Verb';
+  if (m.includes('contract')) return 'Contract Verb';
+  if (m.includes('thematic') || m.includes('-ω')) return 'Thematic (-ω)';
+  return null;
+}
+
+function extractGender(art) {
+  if (art === 'ὁ') return 'Masculine';
+  if (art === 'ἡ') return 'Feminine';
+  if (art === 'τό') return 'Neuter';
+  return null;
+}
+
+// ── Question generator ────────────────────────────────────────────────────
+function generateParseQuestion(word) {
+  // Determine which question types this word supports
+  const types = ['pos'];
+  if ((word.pos === 'noun' || word.pos === 'adj') && word.art && extractGender(word.art)) types.push('gender');
+  if ((word.pos === 'noun' || word.pos === 'adj') && extractDecl(word.mo)) types.push('decl');
+  if (word.pos === 'noun' && word.art) types.push('article');
+  if (word.pos === 'verb' && extractVerbType(word.mo)) types.push('verbtype');
+
+  const type = types[Math.floor(Math.random() * types.length)];
+
+  if (type === 'pos') {
+    const posLabels = {
+      noun:'Noun', verb:'Verb', adj:'Adjective', prep:'Preposition',
+      conj:'Conjunction', particle:'Particle', pronoun:'Pronoun',
+      adv:'Adverb', numeral:'Numeral'
+    };
+    const correct = posLabels[word.pos] || (word.pos.charAt(0).toUpperCase() + word.pos.slice(1));
+    const wrongPool = shuffle(Object.values(posLabels).filter(p => p !== correct));
+    return {
+      word, type,
+      q: `What part of speech is this word?`,
+      options: shuffle([correct, ...wrongPool.slice(0, 3)]),
+      answer: correct
+    };
+  }
+
+  if (type === 'gender') {
+    const correct = extractGender(word.art);
+    const options = shuffle(['Masculine', 'Feminine', 'Neuter', 'Indeclinable']);
+    return { word, type, q: `What is the grammatical gender?`, options, answer: correct };
+  }
+
+  if (type === 'decl') {
+    const correct = extractDecl(word.mo);
+    const options = shuffle(['1st Declension', '2nd Declension', '3rd Declension', '4th (Irregular)']);
+    return { word, type, q: `What declension does this noun belong to?`, options, answer: correct };
+  }
+
+  if (type === 'article') {
+    const correct = word.art;
+    const options = shuffle(['ὁ', 'ἡ', 'τό', 'no article']);
+    return { word, type, q: `What is the article for this noun?`, options, answer: correct };
+  }
+
+  if (type === 'verbtype') {
+    const correct = extractVerbType(word.mo);
+    const options = shuffle(['Thematic (-ω)', 'Contract Verb', 'μι-Verb', 'Deponent']);
+    return { word, type, q: `What type of verb is this?`, options, answer: correct };
+  }
+}
+
+// Build a fresh shuffled queue of ~40 questions from pool
+function buildParseQueue(pool) {
+  const qs = [];
+  const shuffled = shuffle([...pool]);
+  // Generate up to 2 question types per word to fill the minute
+  for (const w of shuffled) {
+    qs.push(generateParseQuestion(w));
+  }
+  // Shuffle again and cap at 80 to have plenty for 60s
+  return shuffle(qs).slice(0, 80).filter(Boolean);
+}
+
+// ── Render entry point ────────────────────────────────────────────────────
+function renderParse() {
+  // If a sprint is actively running, don't reset it
+  if (parseState && parseState.intervalId) return;
+
+  const pool = getParsePool();
+  const el = document.getElementById('parse-content');
+  if (!el) return;
+
+  const best = parseInt(localStorage.getItem('logos-parse-best') || '0');
+
+  if (pool.length < 3) {
+    el.innerHTML = `
+      <div class="empty-state">
+        <div class="empty-gk">ἐγράφη</div>
+        <div class="empty-title">Not enough words</div>
+        <div class="empty-sub">Add at least 3 words to your study boxes<br>to unlock parsing sprints.</div>
+      </div>`;
+    return;
+  }
+
+  const wordCount = pool.length;
+  const bestBadge = best > 0
+    ? `<div style="font-family:'Cinzel',serif;font-size:10px;color:var(--pap-muted);letter-spacing:.1em;">BEST · <span style="color:var(--goldD);font-weight:700;">${best}</span></div>`
+    : '';
+
+  el.innerHTML = `
+    <div class="card" style="text-align:center;padding:36px 28px;">
+      <div style="font-size:54px;color:rgba(160,120,24,0.25);margin-bottom:16px;">γέγραπται</div>
+      <div style="font-family:'Cinzel Decorative','Cinzel',serif;font-size:18px;color:var(--goldD);margin-bottom:6px;">Parsing Sprint</div>
+      <div style="font-size:13px;color:var(--pap-muted);font-style:italic;margin-bottom:24px;line-height:1.7;">
+        60 seconds · morphology drills<br>
+        Identify parts of speech, gender, declension &amp; verb type
+      </div>
+      <div style="display:flex;gap:16px;justify-content:center;margin-bottom:24px;">
+        <div class="card2" style="padding:12px 20px;text-align:center;min-width:90px;">
+          <div style="font-family:'Cinzel',serif;font-size:22px;font-weight:700;color:var(--pap-ink);">${wordCount}</div>
+          <div style="font-size:9px;text-transform:uppercase;letter-spacing:.1em;color:var(--pap-muted);margin-top:2px;">Words</div>
+        </div>
+        <div class="card2" style="padding:12px 20px;text-align:center;min-width:90px;">
+          <div style="font-family:'Cinzel',serif;font-size:22px;font-weight:700;color:var(--pap-ink);">60s</div>
+          <div style="font-size:9px;text-transform:uppercase;letter-spacing:.1em;color:var(--pap-muted);margin-top:2px;">Timer</div>
+        </div>
+        ${best > 0 ? `<div class="card2" style="padding:12px 20px;text-align:center;min-width:90px;">
+          <div style="font-family:'Cinzel',serif;font-size:22px;font-weight:700;color:var(--goldD);">${best}</div>
+          <div style="font-size:9px;text-transform:uppercase;letter-spacing:.1em;color:var(--pap-muted);margin-top:2px;">Best</div>
+        </div>` : ''}
+      </div>
+      <button class="btn1" onclick="startParseSprint()" style="font-size:14px;padding:14px 36px;">
+        Begin Sprint
+      </button>
+    </div>`;
+}
+
+// ── Start sprint ──────────────────────────────────────────────────────────
+function startParseSprint() {
+  const pool = getParsePool();
+  const qs = buildParseQueue(pool);
+  if (!qs.length) { renderParse(); return; }
+
+  parseState = {
+    pool, qs, qi: 0,
+    timer: PARSE_TIMER_MAX,
+    correct: 0, total: 0,
+    intervalId: null,
+    answered: false
+  };
+
+  renderParseQuestion();
+
+  parseState.intervalId = setInterval(() => {
+    parseState.timer--;
+    updateParseTimer();
+    if (parseState.timer <= 0) {
+      clearInterval(parseState.intervalId);
+      parseState.intervalId = null;
+      endSprint();
+    }
+  }, 1000);
+}
+
+// ── Timer display ─────────────────────────────────────────────────────────
+function updateParseTimer() {
+  const el = document.getElementById('parse-timer-num');
+  const bar = document.getElementById('parse-timer-bar');
+  if (!el || !parseState) return;
+  const t = parseState.timer;
+  el.textContent = t;
+  // Color shifts: > 20 gold, 10–20 orange, < 10 red
+  const col = t > 20 ? 'var(--goldD)' : t > 10 ? '#C06820' : '#B03030';
+  el.style.color = col;
+  if (bar) {
+    bar.style.width = (t / PARSE_TIMER_MAX * 100) + '%';
+    bar.style.background = t > 20
+      ? 'linear-gradient(90deg,var(--gold),var(--goldD))'
+      : t > 10
+        ? 'linear-gradient(90deg,#C06820,#E08030)'
+        : 'linear-gradient(90deg,#B03030,#D05050)';
+  }
+}
+
+// ── Render current question ───────────────────────────────────────────────
+function renderParseQuestion() {
+  if (!parseState) return;
+  const { qs, qi, correct, total, timer } = parseState;
+
+  // If we've run out of questions, loop (rebuild queue)
+  if (qi >= qs.length) {
+    parseState.qs = buildParseQueue(parseState.pool);
+    parseState.qi = 0;
+  }
+
+  const q = parseState.qs[parseState.qi];
+  if (!q) { endSprint(); return; }
+
+  parseState.answered = false;
+
+  const w = q.word;
+  const artStr = w.art ? `<span style="font-size:24px;color:var(--pap-muted);font-style:italic;margin-right:6px;">${w.art}</span>` : '';
+
+  const optBtns = q.options.map((opt, i) =>
+    `<button class="parse-field-btn" id="popt-${i}" onclick="parseAnswer(${i})">${opt}</button>`
+  ).join('');
+
+  const el = document.getElementById('parse-content');
+  el.innerHTML = `
+    <!-- Timer bar -->
+    <div style="margin-bottom:14px;">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:5px;">
+        <span style="font-family:'Cinzel',serif;font-size:10px;letter-spacing:.1em;color:var(--pap-muted);text-transform:uppercase;">Sprint</span>
+        <span id="parse-timer-num" style="font-family:'Cinzel',serif;font-size:22px;font-weight:700;color:var(--goldD);line-height:1;">${timer}</span>
+        <span style="font-family:'Cinzel',serif;font-size:10px;letter-spacing:.1em;color:var(--pap-muted);text-transform:uppercase;">${correct}/${total}</span>
+      </div>
+      <div style="height:4px;background:rgba(0,0,0,0.08);border-radius:4px;overflow:hidden;">
+        <div id="parse-timer-bar" style="height:100%;border-radius:4px;transition:width 1s linear;width:${timer/PARSE_TIMER_MAX*100}%;background:linear-gradient(90deg,var(--gold),var(--goldD));"></div>
+      </div>
+    </div>
+
+    <!-- Card -->
+    <div class="card" style="margin-bottom:14px;text-align:center;padding:28px 22px;">
+      <div class="parse-card-gk">${artStr}${w.gk}</div>
+      <div style="font-size:13px;color:var(--pap-muted);font-style:italic;margin-bottom:4px;">${w.gl}</div>
+      <div style="font-family:'Cinzel',serif;font-size:10px;letter-spacing:.12em;color:var(--pap-muted2);text-transform:uppercase;margin-top:10px;">${q.q}</div>
+    </div>
+
+    <!-- Options -->
+    <div class="parse-field-grid">${optBtns}</div>
+
+    <!-- Quit -->
+    <div style="text-align:center;margin-top:16px;">
+      <button class="btn3" onclick="quitParseSprint()" style="font-size:11px;padding:7px 18px;">End Sprint</button>
+    </div>`;
+}
+
+// ── Answer handler ────────────────────────────────────────────────────────
+function parseAnswer(idx) {
+  if (!parseState || parseState.answered) return;
+  parseState.answered = true;
+  parseState.total++;
+
+  const q = parseState.qs[parseState.qi];
+  const chosen = q.options[idx];
+  const isCorrect = chosen === q.answer;
+  if (isCorrect) parseState.correct++;
+
+  // Mark buttons
+  q.options.forEach((opt, i) => {
+    const btn = document.getElementById('popt-' + i);
+    if (!btn) return;
+    btn.onclick = null; // disable further clicks
+    if (opt === q.answer) btn.classList.add('correct');
+    else if (i === idx && !isCorrect) btn.classList.add('wrong');
+  });
+
+  // Advance after delay
+  const delay = isCorrect ? 480 : 860;
+  setTimeout(() => {
+    if (!parseState || !parseState.intervalId) return; // timer expired
+    parseState.qi++;
+    renderParseQuestion();
+  }, delay);
+}
+
+// ── Quit sprint ───────────────────────────────────────────────────────────
+function quitParseSprint() {
+  if (parseState && parseState.intervalId) {
+    clearInterval(parseState.intervalId);
+    parseState.intervalId = null;
+  }
+  parseState = null;
+  renderParse();
+}
+
+// ── End sprint / results screen ───────────────────────────────────────────
+function endSprint() {
+  if (!parseState) return;
+  const { correct, total } = parseState;
+  const pct = total > 0 ? Math.round(correct / total * 100) : 0;
+
+  // Greek praise word
+  const praise = pct >= 90 ? 'εὖγε' : pct >= 70 ? 'καλῶς' : 'πάλιν';
+  const praiseLabel = pct >= 90 ? 'Excellent!' : pct >= 70 ? 'Well done!' : 'Keep going!';
+  const praiseColor = pct >= 90 ? 'var(--lm)' : pct >= 70 ? 'var(--goldD)' : 'var(--l1)';
+
+  // Save best score (total correct answered)
+  const prev = parseInt(localStorage.getItem('logos-parse-best') || '0');
+  const isNewBest = correct > prev;
+  if (isNewBest) localStorage.setItem('logos-parse-best', String(correct));
+
+  parseState = null;
+
+  const el = document.getElementById('parse-content');
+  el.innerHTML = `
+    <div class="card" style="text-align:center;padding:32px 24px;">
+      <div style="font-family:'Cinzel Decorative','Cinzel',serif;font-size:38px;color:${praiseColor};margin-bottom:4px;">${praise}</div>
+      <div style="font-family:'Cinzel',serif;font-size:13px;letter-spacing:.12em;color:var(--pap-muted);text-transform:uppercase;margin-bottom:22px;">${praiseLabel}</div>
+
+      <div class="session-end-grid" style="margin-bottom:20px;">
+        <div class="session-stat-box">
+          <div class="session-stat-num" style="color:var(--lm);">${correct}</div>
+          <div class="session-stat-lbl">Correct</div>
+        </div>
+        <div class="session-stat-box">
+          <div class="session-stat-num">${total}</div>
+          <div class="session-stat-lbl">Answered</div>
+        </div>
+        <div class="session-stat-box">
+          <div class="session-stat-num" style="color:${pct>=70?'var(--goldD)':'var(--l1)'};">${pct}%</div>
+          <div class="session-stat-lbl">Accuracy</div>
+        </div>
+      </div>
+
+      ${isNewBest ? `<div style="display:inline-block;background:rgba(201,160,37,0.15);border:1px solid rgba(201,160,37,0.4);border-radius:20px;padding:5px 18px;font-family:'Cinzel',serif;font-size:10px;letter-spacing:.1em;color:var(--goldD);margin-bottom:18px;">★ NEW BEST · ${correct}</div><br>` : ''}
+
+      <div style="display:flex;gap:10px;justify-content:center;margin-top:4px;">
+        <button class="btn1" onclick="startParseSprint()">Sprint Again</button>
+        <button class="btn2" onclick="renderParse()">Back</button>
+      </div>
+    </div>`;
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
+// END FEATURE 4
+// ═══════════════════════════════════════════════════════════════════════════
+
+function init() {
+  renderStudy();
+  renderLexicon();
+  renderAdd();
+  renderParse();
+  renderStats();
+  document.getElementById('modal-settings').addEventListener('click', function(e) {
+    if (e.target === this) closeSettings();
+  });
+
+  // ── Keyboard shortcuts ──────────────────────────────────────────────────
+  document.addEventListener('keydown', function(e) {
+    // Don't fire while typing in any input or contenteditable
+    if (['INPUT','TEXTAREA','SELECT'].includes(e.target.tagName)) return;
+    if (e.target.isContentEditable) return;
+
+    // Study tab shortcuts
+    const sess = getSession();
+    if (!sess || !sess.active) return;
+
+    if (e.code === 'Space') {
+      e.preventDefault();
+      if (!sess.flipped) flipCard();
+    }
+    if ((e.key === 'j' || e.key === 'J' || e.key === '1') && sess.flipped) {
+      e.preventDefault();
+      rateWord('correct');
+    }
+    if ((e.key === 'k' || e.key === 'K' || e.key === '2') && sess.flipped) {
+      e.preventDefault();
+      rateWord('incorrect');
+    }
+  });
+}
+
+init();
+</script>
+</body>
+</html>
