@@ -983,26 +983,36 @@ const BOOKS = [
 ];
 
 // ───────────────────────────────────────────────────────────────────────────
-// STORAGE HELPERS
+// STORAGE HELPERS  (PIN-prefixed for KV sync)
 // ───────────────────────────────────────────────────────────────────────────
+let _pin = '';   // set on boot from localStorage; drive all pinKey() calls
+
+function insideClaude() {
+  try { return window.self !== window.top; } catch { return true; }
+}
+function pinKey(k) { return _pin ? `${_pin}-${k}` : k; }
+
+// Device-local PIN (not synced — identifies this user's cloud bucket)
+function getPin()  { return localStorage.getItem('logos-pin') || ''; }
+function savePin(p){ localStorage.setItem('logos-pin', p); }
+
 function ls(k, d) {
-  try { const v = localStorage.getItem(k); return v !== null ? JSON.parse(v) : d; }
+  try { const v = localStorage.getItem(pinKey(k)); return v !== null ? JSON.parse(v) : d; }
   catch { return d; }
 }
 function ss(k, v) {
-  try { localStorage.setItem(k, JSON.stringify(v)); } catch {}
+  try { localStorage.setItem(pinKey(k), JSON.stringify(v)); } catch {}
+  if (_pin && !insideClaude()) kvSet(pinKey(k), v);  // fire-and-forget cloud sync
 }
 
-function getBoxes()    { return ls('logos-boxes', {l1q:[],l1:[],l2a:[],l2b:[],l3q:[],l3:[],l4q:[],l4:[],l5a:[],l5b:[],mastered:[]}); }
-function saveBoxes(b)  { ss('logos-boxes', b); }
-function getSession()  { return ls('logos-session', null); }
-function saveSession(s){ ss('logos-session', s); }
-function getStats()    { return ls('logos-stats', {lifetime:{reviewed:0,correct:0,byLevel:{}},sessions:[]}); }
-function saveStats(s)  { ss('logos-stats', s); }
-function getSettings() { return ls('logos-settings', {pin:''}); }
-function saveSettings(s){ ss('logos-settings', s); }
-function getWords()    { return ls('logos-words',    []); }   // array of study word objects
-function saveWords(w)  { ss('logos-words', w); }
+function getBoxes()    { return ls('log-boxes',   {l1q:[],l1:[],l2a:[],l2b:[],l3q:[],l3:[],l4q:[],l4:[],l5a:[],l5b:[],mastered:[]}); }
+function saveBoxes(b)  { ss('log-boxes', b); }
+function getSession()  { return ls('log-session',  null); }
+function saveSession(s){ ss('log-session', s); }
+function getStats()    { return ls('log-stats',    {lifetime:{reviewed:0,correct:0,byLevel:{}},sessions:[]}); }
+function saveStats(s)  { ss('log-stats', s); }
+function getWords()    { return ls('log-words',    []); }   // array of study word objects
+function saveWords(w)  { ss('log-words', w); }
 
 // ───────────────────────────────────────────────────────────────────────────
 // HELPERS
@@ -1056,6 +1066,42 @@ const WORKER_URL = 'https://logos-worker.justin-andre00.workers.dev';
 function getApiKey()   { return localStorage.getItem('logos-apikey') || ''; }
 function saveApiKey(k) { localStorage.setItem('logos-apikey', k); }
 function apiUrl()      { return WORKER_URL; }
+
+// ── KV sync helpers ──────────────────────────────────────────────────────────
+async function kvSet(key, val) {
+  if (!_pin || insideClaude()) return;
+  try {
+    await fetch(WORKER_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'X-Action': 'kv-set' },
+      body: JSON.stringify({ key, value: JSON.stringify(val) }),
+    });
+  } catch(e) { /* silent — local write already succeeded */ }
+}
+
+async function kvGetAll(pin) {
+  const r = await fetch(WORKER_URL, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', 'X-Action': 'kv-getall', 'X-Pin': pin },
+    body: '{}',
+  });
+  if (!r.ok) throw new Error('HTTP ' + r.status);
+  return await r.json();
+}
+
+async function bgSyncFromKV() {
+  if (!_pin || insideClaude()) return;
+  try {
+    const data = await kvGetAll(_pin);
+    let changed = false;
+    Object.entries(data).forEach(([k, v]) => {
+      const cur   = localStorage.getItem(k);
+      const fresh = typeof v === 'string' ? v : JSON.stringify(v);
+      if (cur !== fresh) { localStorage.setItem(k, fresh); changed = true; }
+    });
+    if (changed) { renderStudy(); renderLexicon(); renderStats(); }
+  } catch(e) { /* offline — no problem */ }
+}
 function apiHeaders()  {
   return {
     'Content-Type': 'application/json',
@@ -1077,7 +1123,7 @@ function requireApi() {
 
 function openSettings() {
   document.getElementById('set-apikey').value = getApiKey();
-  document.getElementById('set-pin').value    = getSettings().pin || '';
+  document.getElementById('set-pin').value    = getPin();
   document.getElementById('modal-settings').classList.remove('hidden');
 }
 function closeSettings() {
@@ -1086,8 +1132,12 @@ function closeSettings() {
 function saveSettings() {
   const key = document.getElementById('set-apikey').value.trim();
   if (key) saveApiKey(key);
-  const cfg = { pin: document.getElementById('set-pin').value.trim() };
-  ss('logos-settings', cfg);
+  const newPin = document.getElementById('set-pin').value.trim();
+  if (newPin !== _pin) {
+    _pin = newPin;
+    savePin(newPin);
+    if (_pin) bgSyncFromKV();  // pull cloud data for new PIN
+  }
   closeSettings();
   showToast('Settings saved');
 }
@@ -2241,7 +2291,7 @@ function renderStats() {
   const lexMastered   = allWords.filter(w => w.lexId != null && masteredUids.has(String(w.id))).length;
 
   const streak    = computeStreak(allSess);
-  const parseBest = parseInt(localStorage.getItem('logos-parse-best') || '0');
+  const parseBest = parseInt(localStorage.getItem(pinKey('log-parse-best')) || '0');
 
   // ── Period label ──────────────────────────────────────────────────────────
   const periodLabel = { week: 'This Week', month: 'This Month', lifetime: 'All Time' }[statsFilter];
@@ -2468,14 +2518,15 @@ function renderStats() {
 
 // ── Export all data as JSON download ──────────────────────────────────────
 function exportData() {
-  const keys = ['logos-words','logos-boxes','logos-stats','logos-settings','logos-parse-best','logos-session'];
-  const data  = { version: 1, exported: new Date().toISOString() };
-  keys.forEach(k => {
-    const raw = localStorage.getItem(k);
+  // Export canonical (un-prefixed) key names so the backup is PIN-agnostic
+  const baseKeys = ['log-words','log-boxes','log-stats','log-parse-best','log-session'];
+  const data = { version: 2, exported: new Date().toISOString() };
+  baseKeys.forEach(k => {
+    const storageKey = pinKey(k);
+    const raw = localStorage.getItem(storageKey);
     try { data[k] = raw !== null ? JSON.parse(raw) : null; }
     catch { data[k] = raw; }
   });
-  // Include API key (user's own data — needed for cross-device restore)
   data['logos-apikey'] = localStorage.getItem('logos-apikey') || '';
 
   const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
@@ -2497,14 +2548,17 @@ function importData(e) {
   reader.onload = function(ev) {
     try {
       const data = JSON.parse(ev.target.result);
-      // Basic validation
-      if (!data['logos-words'] && !data['logos-boxes']) {
+      // Support both v1 (logos-*) and v2 (log-*) key names
+      const v1map = { 'logos-words':'log-words', 'logos-boxes':'log-boxes', 'logos-stats':'log-stats', 'logos-session':'log-session' };
+      Object.entries(v1map).forEach(([old, nw]) => { if (data[old] !== undefined && data[nw] === undefined) data[nw] = data[old]; });
+
+      if (!data['log-words'] && !data['log-boxes']) {
         showToast('⚠ Invalid backup file', 3000); return;
       }
-      const storageKeys = ['logos-words','logos-boxes','logos-stats','logos-settings','logos-parse-best','logos-session'];
-      storageKeys.forEach(k => {
+      const baseKeys = ['log-words','log-boxes','log-stats','log-parse-best','log-session'];
+      baseKeys.forEach(k => {
         if (data[k] !== undefined && data[k] !== null)
-          localStorage.setItem(k, JSON.stringify(data[k]));
+          localStorage.setItem(pinKey(k), JSON.stringify(data[k]));
       });
       if (data['logos-apikey']) localStorage.setItem('logos-apikey', data['logos-apikey']);
       showToast('Import successful — reloading…', 2200);
@@ -2889,7 +2943,7 @@ function renderParse() {
   const el = document.getElementById('parse-content');
   if (!el) return;
 
-  const best = parseInt(localStorage.getItem('logos-parse-best') || '0');
+  const best = parseInt(localStorage.getItem(pinKey('log-parse-best')) || '0');
 
   if (pool.length < 3) {
     el.innerHTML = `
@@ -3085,9 +3139,9 @@ function endSprint() {
   const praiseColor = pct >= 90 ? 'var(--lm)' : pct >= 70 ? 'var(--goldD)' : 'var(--l1)';
 
   // Save best score (total correct answered)
-  const prev = parseInt(localStorage.getItem('logos-parse-best') || '0');
+  const prev = parseInt(localStorage.getItem(pinKey('log-parse-best')) || '0');
   const isNewBest = correct > prev;
-  if (isNewBest) localStorage.setItem('logos-parse-best', String(correct));
+  if (isNewBest) { localStorage.setItem(pinKey('log-parse-best'), String(correct)); kvSet(pinKey('log-parse-best'), correct); }
 
   parseState = null;
 
@@ -3126,6 +3180,10 @@ function endSprint() {
 // ═══════════════════════════════════════════════════════════════════════════
 
 function init() {
+  // ── Load PIN and kick off background KV sync ──────────────────────────────
+  _pin = getPin();
+  if (_pin && !insideClaude()) bgSyncFromKV();
+
   renderStudy();
   renderLexicon();
   renderAdd();
