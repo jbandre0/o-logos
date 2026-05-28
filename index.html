@@ -1352,7 +1352,8 @@ function startSession() {
   if (!levels.length) { showToast('No words in selected levels'); return; }
 
   const dow   = new Date().getDay();
-  const steps = levels.map(id => ({ box: id }));
+  // Reverse so highest level is quizzed first (BOXES is defined L1→L5b ascending)
+  const steps = levels.map(id => ({ box: id })).reverse();
   const firstBox = steps[0].box;
   const sess = {
     active:         true,
@@ -1569,7 +1570,8 @@ function finishStep(sess) {
   if (box==='l1') {
     const f = getBoxes();
     if ((f.l1q||[]).length > 0) moveWords([...f.l1q],'l1q','l1');
-    endSession(sess); return;
+    // fall through to advanceStep — don't hardcode endSession here,
+    // there may be higher-level steps remaining
   }
   advanceStep(sess);
 }
